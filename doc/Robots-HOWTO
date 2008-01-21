@@ -1,0 +1,241 @@
+Robots-HOWTO
+
+Writing programs for GNU Robots
+
+Jim Hall <jhall1@isd.net>
+
+_____________________________________________________________________
+
+Introduction
+_____________________________________________________________________
+
+Hi, and welcome to GNU Robots!  I was going to call this file
+`api.txt' but I figured that wouldn't be very helpful.  And I can tell
+right off the bat that I'm not just going to talk about the GNU Robots
+programming API. But I will talk about that quite a bit, since it's so
+important to using GNU Robots.
+
+GNU Robots is a game/diversion where you construct a program for a
+little robot, then set him loose and watch him explore a world on his
+own.  The robot program is written in Scheme, and is implemented using
+GNU Guile.
+
+GNU Robots is an ideal way to introduce someone to the fundamentals of
+computer programming.  Scheme is a very simple language to learn, and
+by writing Scheme programs for GNU Robots, you can immediately enjoy
+the results of your work.
+
+That said, I'll disclose now that I am not, by nature, a Scheme
+programmer. I only picked up a bit of Scheme when I created GNU
+Robots, and I found that the GNU project had created this wonderful
+extension library that is GNU Guile.  In order to use my own program,
+I had to learn a bit of Scheme.  It wasn't hard.  Did I mention that
+Scheme is a simple language to learn?
+
+_____________________________________________________________________
+
+Writing programs
+_____________________________________________________________________
+
+Gosh, what's the best way to introduce computer programming with GNU
+Robots?  I guess I'm not the kind of person who can teach someone else
+to do computer programming.  So I'll take the easy way out:
+
+Most of writing programs for GNU Robots involves writing Scheme code.
+Remember, your robot program is just a Scheme program.  So go buy
+yourself a nice introduction to Scheme book, if you don't already have
+one.  Or, if you're a particularly brave person, see what you can pick
+up from the robot examples under the `scheme/' directory.
+
+Scheme is not a difficult language to pick up, both for programmers
+and for those new to programming.  I would recommend that you adopt a
+"function" approach to programming a GNU Robot.  Many people will
+refer to this as a "divide and conquer" strategy, and I find it works
+well.
+
+What this means is that you will want to identify the basic kinds of
+tasks that a robot can perform, then group those into particular kinds
+of activities.  For example, one basic activity for a robot might be
+to pick up something directly in front of it, then move into the space
+that is now empty:
+
+ (define (grab-and-move)
+   (robot-grab)
+   (robot-move 1)
+ )
+
+The `define' statement is from Scheme, and allows us to define a
+function called `grab-and-move'.  The function consists of two
+statements: `robot-grab' to pick up a thing immediately in front of
+the robot, and `robot-move' to move the robot a given number of
+spaces.
+
+That was easy.  Now, let's try another.
+
+The whole goal of GNU Robots is to get the highest score that you can.
+To increase your score, you need to pick up prizes.  So let's create a
+function that allows our little robot to pick up some prizes.  We'll
+build on the `grab-and-move' function that we defined above.
+
+ (define (grab-prize)
+   (if (eqv? (robot-feel "prize") #t) (grab-and-move))
+ )
+
+This is not so scary a statement, if we look at it a piece at a time.
+The `eqv?' statement compares the truth value of two expressions.  In
+this case, we compare a test expression against a literal true value
+(`#t').  Our test expression is `(robot-feel "prize")' which will
+return a `#t' value if the little robot is able to detect a prize in
+the space immediately in front of it.
+
+If the `eqv?' statement is successful (the two expression are the
+same, or in other words the robot is able to feel a prize in the space
+right in front of it) then Scheme will execute the `grab-and-move'
+function.
+
+In plain English: if the robot detects a prize in the space
+immediately before it, the robot will pick it up, and move forward
+into that space.
+
+But every time you make the little robot take an action, you cause it
+to use energy.  To restore its energy levels, it needs to find and
+consume food.  So let's create a function similar to the above that
+picks up a food item:
+
+ (define (grab-food)
+   (if (eqv? (robot-feel "food") #t) (grab-and-move))
+ )
+
+As you can see, the `grab-food' function is virtually identical to the
+`grab-prize' function.  I don't think you need me to explain the
+difference.
+
+From here, you are on your way to creating a cool robot that you can
+set loose in GNU Robots.  It's just a matter of picking up some more
+of the flow control structures like do-while loops and more of the
+if-then tests.  Then you'll have a fine robot program to play with.
+
+_____________________________________________________________________
+
+Robot actions
+_____________________________________________________________________
+
+But the question you're probably waiting to have answered is: "What
+can I make the little robot do?"  Ah, that's the list of `robot-*'
+functions.
+
+Here is a table of all the GNU Robots functions, called primitives,
+that you can use in your robot program.  Each primitive has an energy
+cost associated with it.
+
+Note that some primitives will take an argument, and some will not.
+If an argument is a number, I'll print `N' after the function name.
+If the argument is a GNU Robots "thing" then I'll print `TH' after the
+function name.  If the primitive does not take an argument, I will
+print nothing.
+
+ PRIMITIVE           ENERGY    ACTION
+=====================================================================
+ robot-turn N          -2      Turns the robot N spaces to the right
+			       or left.  If `N' is a positive number,
+			       the robot turns to the right.  If `N'
+			       is negative, the robot turns to the
+			       left.  Every turn has a cost of -2, so
+			       if you `robot-turn 2' then the cost is
+			       -4 to your energy.
+---------------------------------------------------------------------
+ robot-move N	       -2      Moves the robot N spaces forwards or
+			       backwards.  If `N' is a positive
+			       number, the robot moves forwards.  If
+			       `N' is negative, the robot moves
+			       backwards.  Every move has a cost of
+			       -2, so if you `robot-move 2' then the
+			       cost is -4 to your energy.
+---------------------------------------------------------------------
+ robot-smell TH        -1      Smells for a thing.  If the thing is
+			       in the surrounding eight spaces, the
+			       function returns a true (`#t') value.
+---------------------------------------------------------------------
+ robot-feel TH         -1      Feels for a thing in the space directly
+			       in front of the robot.  If the thing is
+			       detected in that space, the function
+			       returns a true (`#t') value.  Note that
+			       you can feel a baddie, and not take any
+			       damage.
+---------------------------------------------------------------------
+ robot-look TH         -1      Looks ahead across empty spaces for a
+			       particular thing.  If the thing is
+			       seen, the function return returns a
+			       true (`#t') value.  Note that this is
+			       sort of a braindead function, in that
+			       it does not provide the distance to the
+			       thing.  The robot cannot look behind
+			       objects, so if you look for a food
+			       item, and there is a prize item in the
+			       way, the function returns false.
+---------------------------------------------------------------------
+ robot-grab            -5      Attempts to pick up what is in the
+			       space directly in front of the little
+			       robot.  Note that you should not try to
+			       pick up baddies or walls.  If the item
+			       is food, you increase your energy by
+			       +10.  If the item is a prize, you
+			       increase your score by +1.  The
+			       function returns a true (`#t') if the
+			       robot was able to pick the thing up.
+---------------------------------------------------------------------
+ robot-zap            -10      Uses the robot's little gun to zap
+			       whatever is in the space directly in
+			       front of it.  If you were able to zap
+			       something (a baddie, or even a prize or
+			       food) then the function returns a true
+			       (`#t') value.
+---------------------------------------------------------------------
+ robot-stop            0       Exits GNU Robots immediately.
+---------------------------------------------------------------------
+ robot-get-shields     0       Returns the level of the little robot's
+			       shields.
+---------------------------------------------------------------------
+ robot-get-energy      0       Returns the level of the little robot's
+			       energy.
+---------------------------------------------------------------------
+ robot-get-score       0       Returns the robot's score (how many
+			       prizes have been picked up.)
+=====================================================================
+
+
+And what kinds of "things" are out there to be detected by
+`robot-smell', `robot-feel' and `robot-look'?  Here is a list of all
+possible things in the GNU Robots world:
+
+ THING      DESCRIPTION
+=====================================================================
+ baddie     A nasty little critter that is generally bad for your
+	    health.  Either leave these alone, or zap them.  Don't try
+	    to pick them up, or you will inflict damage to your
+	    shields.  Don't bump up against them--that doesn't feel
+	    too good, either.
+---------------------------------------------------------------------
+ space      An empty space.  There's nothing interesting here.
+---------------------------------------------------------------------
+ food       Yum!  A health item that will help to restore +10 points
+	    of your robot's energy levels.
+---------------------------------------------------------------------
+ prize      Pick these up!  This will add +1 point to your score.
+	    Remember, the goal of GNU Robots is to get the highest
+	    score!
+---------------------------------------------------------------------
+ wall       An obstacle.  You can't zap these, so you better go around
+	    them.  Trying to grab a wall does nothing to you, but
+	    bumping up against one will inflict damage to your
+	    shields.
+=====================================================================
+
+
+_____________________________________________________________________
+
+Go try it!
+_____________________________________________________________________
+
+Okay, that's about all the information you should need to set you on
+the way to writing really cool GNU Robots programs.  Have fun!

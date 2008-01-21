@@ -1,0 +1,59 @@
+RELEASE HISTORY FOR GNU ROBOTS:
+_____________________________________________________________________
+
+1.0D  Added some extra documentation (but not much) and the early
+      beginning of code clean-up.
+
+1.0C  Pawel <uzturnau@cyf-kr.edu.pl> fixed a bug where the robot was
+      not able to smell anything to the east or west.
+
+      Fixed a few other bugs.
+
+      Moving the robot around and zapping things and picking things up
+      just got a little more expensive.  If you are running an old
+      robot under GNU Robots 1.0, you may notice that your robot won't
+      last as long.  I think the new energy "costs" will challenge
+      people to write more efficient robot programs.
+
+      Removed scm_random and scm_randomize, since the random function
+      is now provided in GNU Guile 1.3.  If you are trying to run GNU
+      Robots under GNU Guile 1.2 or previous, you will need to patch
+      it yourself using the src/random.c source file.
+
+      Ran all the .c files through GNU Indent.  Sorry about not having
+      done that before, everyone.
+
+      Added more comments to the sample robot programs.
+
+      Tim Northover contributed a GNU Robots map editor.  I have put
+      this in the `contrib' directory.
+
+_____________________________________________________________________
+
+0.95 - Applied several patches from Steinar Hamre
+       <steinarh@stud.fim.ntnu.no> that fix how `configure' locates
+       GNU Guile.  No feature enhancements.
+
+0.91 - Fixed a few annoying bugs.  No feature enhancements.
+
+0.9  - Used GNU Autoconf to configure the source for various platforms.
+       Made robot variables into `long', improved command line using
+       `getopt', and added Scheme functions to check robot status.
+       Also, included some sample robots that were submitted.
+
+0.8  - Added GNU Getopt to scan command line.  Added contributions for
+       X Windows interface, and added cooler XPMs.  Changed build
+       target names, to be more descriptive.  Added html
+       documentation.
+
+0.77 - Added 'random' and 'randomize' functions.  Redefined 'exit' and
+       'quit' to exit nicely.  Some tweaking to initial energy.
+
+0.76 - Added code to stop the game when the robot runs out of energy
+       or shields fall to zero.  Reduced globals to only main.c and
+       api.c.  Now builds both the curses and log-file game for 'make
+       all'.
+
+0.72 - Fixed a bug during movement.  Added a new sample robot.  First
+       release when the game engine actually seems to work.  Does not
+       stop the game when the robot is dead, though.

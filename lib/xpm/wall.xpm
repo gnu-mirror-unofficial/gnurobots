@@ -1,0 +1,26 @@
+/* XPM */
+static char *wall_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        3            1",
+/* colors */
+". c #cccccc",
+"# c #993300",
+"a c #cc0033",
+/* pixels */
+"...............#",
+".aaaaaaaaaaaaaa#",
+".aaaaaaaaaaaaaa#",
+".aa##########aa#",
+".aa#aaaaaaaa.aa#",
+".aa#aaaaaaaa.aa#",
+".aa#aa...#aa.aa#",
+".aa#aa.aa#aa.aa#",
+".aa#aa.aa#aa.aa#",
+".aa#aa####aa.aa#",
+".aa#aaaaaaaa.aa#",
+".aa#aaaaaaaa.aa#",
+".aa#.........aa#",
+".aaaaaaaaaaaaaa#",
+".aaaaaaaaaaaaaa#",
+"################"
+};

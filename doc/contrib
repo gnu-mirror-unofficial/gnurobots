@@ -1,0 +1,20 @@
+CONTRIBUTORS TO GNU ROBOTS:
+_____________________________________________________________________
+
+* Jim Hall, <jhall1@isd.net>
+  author
+
+* Tom Whittock, <shallow@dial.pipex.com>
+  X11 interface
+
+* Tim Northover, tim@pnorthover.freeserve.co.uk
+  mapedit.c (GNU Robots map editor, for GNOME)
+
+* Kyle Hasselbacher <kyle@toehold.com>
+  'greedy.scm' and 'mapper.scm'
+
+* david.madore@ens.fr
+  Helped fix `configure.in' to detect X Windows
+
+* Steinar Hamre <steinarh@stud.fim.ntnu.no>
+  Patched `configure.in' and several other files to better detect GNU Guile

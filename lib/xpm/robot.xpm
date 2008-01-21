@@ -1,0 +1,28 @@
+/* XPM */
+static char *robot_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        5            1",
+/* colors */
+". c #bfbfbf",
+"# c #000000",
+"a c #808080",
+"b c #c0c0c0",
+"c c #ffffff",
+/* pixels */
+"................",
+"................",
+"................",
+"..####...####...",
+".#bccb#.#bccb#..",
+"#bccccb#bccccb#.",
+"#cccccc#cccccc#a",
+"#cc##cc#cc##cc#a",
+"#cc##cc#cc##cc#a",
+"#bccccb#bccccb#a",
+".#bccb#a#bccb#aa",
+"..####aa.####aa.",
+"...aaaa...aaaa..",
+"................",
+"................",
+"................"
+};

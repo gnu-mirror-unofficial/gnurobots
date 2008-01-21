@@ -1,0 +1,106 @@
+
+Introduction
+============
+
+GNU Robots is a game/diversion where you construct a program for a
+little robot, then set him loose and watch him explore a world on his
+own.  The robot program is written in Scheme, and is implemented using
+GNU Guile.
+
+Installing GNU Robots
+======================
+
+(0) To build GNU Robots, you *first* need to have already compiled and
+    installed the GNU Guile library.  GNU Robots was built using Guile
+    1.3.
+
+    Guile 1.2 will also work, but you will need to provide your own
+    scm_random() function.  See src/random.c
+
+(1) Type:
+
+    ./configure
+
+    To specify an unusual location for GNU Guile, you can use the
+    `--with-guile=' option, like this:
+
+    ./configure --with-guile=/home/jhall
+
+    To specify an unusual location for curses, you can use the
+    `--with-curses=' option, like this:
+
+    ./configure --with-curses=/hub/local
+
+(2) Look at the generated `Makefile', and check that everything is
+    okay.  Then type:
+
+    make
+
+Notes
+=====
+
+* There is really one key missing piece in GNU Robots: I had
+* originally envisioned a "visual" programming interface for GNU
+* Robots, one where you could create a robot program by dropping into
+* place icons that represent the robot's actions.  There would be one
+* icon to tell the robot to move forward, another to have him turn to
+* the left or right, and another to have him pick up things or fire
+* his little gun.
+*
+* This programming interface would really just act as a kind of code
+* generator; it would write a Scheme program that you could then load
+* into GNU Robots.  Writing this in GTK+ would seem like a good idea.
+*
+* If anyone would like to help write this programming interface for
+* GNU Robots, please contact me!  You may reach me at <jhall1@isd.net>
+
+
+There are three ways to run GNU Robots:
+
+1. X Windows ("xrobots")
+2. text mode, using curses ("robots")
+3. text mode, log file output ("robots_logfile")
+
+I use the robots_logfile when I am hosting a GNU Robots competition,
+because it is not really interesting for me to see how the many robots
+are individually interacting with their environments. I am only
+interested in the outcome.
+
+I use the xrobots program when I am running my own GNU Robot game,
+because there I *am* interested in what my robot is doing.
+
+--
+
+The "robots" program is a curses-based version of the game, using an
+ASCII approximation of the game elements.  Your robot will appear as a
+"v" when it points South, "^" when it points North, and "<" and ">"
+for West and East.  Empty spaces are shown as " ", walls as "#",
+baddies as "@", and food and prizes as "+" and "$".
+
+You'll note that this is the same notation used in the GNU Robots map
+files.  The initial location of the robot is not shown in the map
+file, but is always at 1,1 facing East (the upper-left corner is
+always 0,0).
+
+The sample map that is provided as "maps/small.map" is just a single
+room, with prizes all along the four walls.  The sample robot program
+"scheme/simple.scm" knows how to pick up all these prizes and then
+quit.  Other map files can be found in the maps/ directory, and other
+robot programs are in the scheme/ directory.
+
+The usage for robots, xrobots, robots_logfile is as follows:
+
+  robots [OPTION]... [FILE]
+
+Options are:
+
+  -f, --map-file=FILE    Load map file
+  -s, --shields=N        Set initial shields to N
+  -e, --energy=N         Set initial energy to N
+  -V, --version          Output version information and exit
+  -h, --help             Display this help and exit
+
+Even though it's not shown, the `-f' option to load a map file is
+required by GNU Robots.  Otherwise, the game will not be able to open
+a map for your robot to explore!
+

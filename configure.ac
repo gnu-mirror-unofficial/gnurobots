@@ -1,0 +1,145 @@
+dnl
+dnl configure.ac for GNU Robots
+dnl Copyright (C) 1998 Jim Hall, jhall1@isd.net
+dnl
+dnl GNU Robots is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl
+dnl GNU Robots is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License
+dnl along with GNU Robots; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+dnl
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT([GNU Robots], [1.1], [zeenix@gmail.com], [robots])
+AC_PREREQ([2.59])
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_AUX_DIR([build])
+AC_CONFIG_SRCDIR([include/api.h])
+AM_INIT_AUTOMAKE
+
+dnl Checks for programs.
+AC_PROG_CC
+
+dnl libtool stuff
+AC_LIBTOOL_DLOPEN
+dnl AC_LIBLTDL_CONVENIENCE
+AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
+
+AC_SUBST(INCLTDL)
+AC_SUBST(LIBLTDL)
+
+dnl Locate X Windows
+dnl We need AC_PATH_XTRA to also locate extra libaries X depends on.
+dnl It will ``export'' X_CFLAGS, X_PRE_LIBS, X_EXTRA_LIBS and X_LIBS,
+dnl but for some reason we need to add -lX11 ourselves.
+AC_PATH_XTRA
+
+if test "$have_x" = yes; then
+  x_libs="-lX11"
+  use_x11="yes"
+
+dnl Checks for more X11 libraries, these go to X_LIBS.
+AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
+  x_libs="-lXpm $x_libs"
+  use_x11="yes",
+  AC_MSG_WARN("can't find libXpm, X11 plugin shall not be compiled")
+  use_x11="no",
+  $X_LIBS $x_libs $X_PRE_LIBS $X_EXTRA_LIBS)
+
+dnl finished with X, so we update X_LIBS.
+X_LIBS="$X_LIBS $x_libs"
+
+else
+  AC_MSG_WARN("can't find X windows, X11 plugin shall not be compiled")
+  use_x11="no",
+fi
+
+AM_CONDITIONAL(USE_X11, test "$use_x11" = "yes")
+
+dnl Check for curses, add to CURSES_LIBS, and CURSES_CFLAGS.
+dnl At this time, only ncurses is supported.
+dnl We should check for SYSV curses too.
+AC_CHECK_HEADERS(ncurses.h,
+   use_curses="yes",
+   AC_MSG_WARN("Can't find ncurses. Curses plugin shall not be compiled.")
+   use_curses="no")
+
+dnl we dont need other checks if the headers are not found
+if test "$use_curses" = "yes"
+then
+
+dnl allow user to specify directory where to find ncurses
+if test -n "$with_ncurses"
+then
+  ncurses_cflags="-I$with_ncurses/include"
+  ncurses_libs="-L$with_ncurses/lib"
+fi
+
+AC_CHECK_LIB(ncurses, initscr,
+  CURSES_LIBS="$ncurses_libs -lncurses"
+  CURSES_CFLAGS="$ncurses_cflags"
+  use_curses="yes",
+  AC_MSG_WARN("Can't find ncurses. Curses plugin shall not be compiled.")
+  use_curses="no")
+
+AC_SUBST(CURSES_LIBS)
+AC_SUBST(CURSES_CFLAGS)
+
+fi
+
+AM_CONDITIONAL(USE_CURSES, test "$use_curses" = "yes")
+
+dnl Check for math library
+AC_CHECK_LIB(m, pow)
+
+dnl Check for guile
+GUILE_FLAGS
+
+dnl Some sytems need -ldl for dynamic library support.
+dnl AC_CHECK_LIB(dl, dlopen)
+
+dnl Check for glib2
+PKG_CHECK_MODULES(GLIB2,glib-2.0 >= 2.4 gobject-2.0 gmodule-2.0,HAVE_GLIB2=yes,HAVE_GLIB2=no)
+AC_SUBST(GLIB2_LIBS)
+AC_SUBST(GLIB2_CFLAGS)
+
+schemedir="\$(pkgdatadir)/scheme"
+AC_SUBST(schemedir)
+
+mapsdir="\$(pkgdatadir)/maps"
+AC_SUBST(mapsdir)
+
+if test "x$HAVE_GLIB2" = "xno"; then
+  AC_MSG_ERROR([GNU Robots requires GLib2 to compile.])
+fi
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+dnl Done.
+AC_CONFIG_FILES([Makefile
+ contrib/Makefile
+ doc/Makefile
+ getopt/Makefile
+ include/Makefile
+ lib/Makefile
+ lib/xpm/Makefile
+ maps/Makefile
+ scheme/Makefile
+ src/Makefile
+ ])
+AC_OUTPUT
+
