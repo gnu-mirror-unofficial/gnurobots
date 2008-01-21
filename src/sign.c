@@ -1,3 +1,5 @@
+/* TODO: Either this needs to go, or it needs a copyright header */
+
 #include <stdio.h>
 #include <glib.h>
 
