@@ -136,7 +136,7 @@ api_robot_get_score (void)
   return (scm_long2num (score));
 }
 
-void 
+void
 api_init (void)
 {
   /* define some new builtins (hooks) so that they are available in
@@ -149,7 +149,7 @@ api_init (void)
   scm_c_define_gsubr ("robot-look", 1, 0, 0, api_robot_look);
   scm_c_define_gsubr ("robot-grab", 0, 0, 0, api_robot_grab);
   scm_c_define_gsubr ("robot-zap", 0, 0, 0, api_robot_zap);
-  
+
   scm_c_define_gsubr ("robot-get-shields", 0, 0, 0, api_robot_get_shields);
   scm_c_define_gsubr ("robot-get-energy", 0, 0, 0, api_robot_get_energy);
   scm_c_define_gsubr ("robot-get-score", 0, 0, 0, api_robot_get_score);
@@ -157,4 +157,3 @@ api_init (void)
   scm_c_define_gsubr ("stop", 0, 0, 0, api_robot_stop);
   scm_c_define_gsubr ("quit", 0, 0, 0, api_robot_stop);
 }
-

@@ -1,7 +1,7 @@
 /* $Id: main.c,v 1.28 2005/09/06 19:55:40 zeenix Exp $ */
 /*
- * GNU Robots game engine.  This is the main() program, using GNU
- * Guile as my backend to handle the language.
+ * GNU Robots game engine. This is the main() program, using GNU
+ * Guile as the backend to handle the language.
  *
  * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
  * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
