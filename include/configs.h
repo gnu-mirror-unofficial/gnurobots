@@ -58,6 +58,6 @@
 #define DEFAULT_MAP_ROWS 20
 
 #define PKGINFO PACKAGE_NAME " " VERSION
-#define COPYRIGHT "Copyright (C) 1998,1999,2000 Jim Hall <jhall1@isd.net>"
+#define COPYRIGHT "Copyright (C) 1998,1999,2000 Jim Hall <jhall1@isd.net>\nCopyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>"
 
 #endif /* CONFIGS_H */
