@@ -1,4 +1,5 @@
-/* Robot object for the GNU Robots game
+/*
+ * Robot object for the GNU Robots game
  *
  * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
  * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>

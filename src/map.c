@@ -36,21 +36,22 @@ enum
 
 GType _map_type = 0;
 
-static void map_class_init (MapClass * klass);
-static void map_init (GObject * object);
+static void map_class_init (MapClass *klass);
+static void map_init (GObject *object);
 
-static void map_set_property (GObject * object, guint prop_id,
-    const GValue * value, GParamSpec * pspec);
+static void map_set_property (GObject *object, guint prop_id,
+                  const GValue *value, GParamSpec *pspec);
 
-static void map_get_property (GObject * object, guint prop_id,
-    GValue * value, GParamSpec * pspec);
+static void map_get_property (GObject *object, guint prop_id,
+                  GValue *value, GParamSpec *pspec);
 
 static GObjectClass *parent_class = NULL;
 
 GType
 map_get_type (void)
 {
-  if (!_map_type) {
+  if (!_map_type)
+  {
     static const GTypeInfo object_info = {
       sizeof (MapClass),
       NULL,
@@ -65,17 +66,14 @@ map_get_type (void)
     };
 
     _map_type =
-        g_type_register_static (G_TYPE_OBJECT, 
-			"Map", 
-			&object_info,
-			0);
+      g_type_register_static (G_TYPE_OBJECT, "Map", &object_info, 0);
   }
 
   return _map_type;
 }
 
 static void
-map_class_init (MapClass * klass)
+map_class_init (MapClass *klass)
 {
   GObjectClass *gobject_class;
 
@@ -85,16 +83,17 @@ map_class_init (MapClass * klass)
 
   gobject_class->set_property = map_set_property;
   gobject_class->get_property = map_get_property;
-  
+
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_SIZE,
-      g_param_spec_pointer ("size", 
-	      "Size", 
-	      "The size of the map",
-	      G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                   g_param_spec_pointer ("size",
+                             "Size",
+                             "The size of the map",
+                             G_PARAM_READWRITE |
+                             G_PARAM_CONSTRUCT));
 }
 
 static void
-map_init (GObject * object)
+map_init (GObject *object)
 {
   Map *map = MAP (object);
 
@@ -105,7 +104,7 @@ map_init (GObject * object)
 
 /* fload_map - loads a map file into memory. */
 static void
-fload_map (Map *map, FILE * stream)
+fload_map (Map *map, FILE *stream)
 {
   gint ch;
   gint i, j;
@@ -114,96 +113,97 @@ fload_map (Map *map, FILE * stream)
   i = 0;
   j = 0;
 
-  while ((ch = fgetc (stream)) != EOF) {
+  while ((ch = fgetc (stream)) != EOF)
+  {
     /* Add the ch to the map */
+    switch (ch)
+    {
+    case SPACE:
+    case WALL:
+    case BADDIE:
+    case PRIZE:
+    case FOOD:
+      map->_map[j][i] = ch;
+      break;
 
-    switch (ch) {
-      case SPACE:
-      case WALL:
-      case BADDIE:
-      case PRIZE:
-      case FOOD:
-        map->_map[j][i] = ch;
-        break;
+    case '\n':
+      /* ignore the newline */
+      break;
 
-      case '\n':
-        /* ignore the newline */
-        break;
-
-      default:
-        /* not a valid map char, but we'll add a space anyway */
-
-        map->_map[j][i] = SPACE;
-        break;
-    }                           /* switch */
+    default:
+      /* not a valid map char, but we'll add a space anyway */
+      map->_map[j][i] = SPACE;
+      break;
+    }               /* switch */
 
     /* Check for newline */
-
-    if (ch == '\n') {
+    if (ch == '\n')
+    {
       /* the line may have ended early.  pad with WALL */
-
-      while (i < map->size.num_cols) {
+      while (i < map->size.num_cols)
+      {
         map->_map[j][i++] = WALL;
       }
     }
 
-
     /* if newline */
     /* Check for limits on map */
-    if (++i >= map->size.num_cols) {
+    if (++i >= map->size.num_cols)
+    {
       /* We have filled this line */
-
       ++j;
       i = 0;
 
       /* Flush the buffer for this line */
-
-      while (ch != '\n') {
+      while (ch != '\n')
+      {
         ch = fgetc (stream);
       }
     }
     /* if i */
-    if (j >= map->size.num_rows) {
+    if (j >= map->size.num_rows)
+    {
       /* the map is filled */
-
       return;
     }
-  }                             /* while fgetc */
+  }             /* while fgetc */
 
   /* After the loop, we are done reading the map file.  Make sure this
      is bounded by WALL. */
-  if (i > 0) {
+  if (i > 0)
+  {
     ++j;
   }
 
-  for (i = 0; i < map->size.num_cols; i++) {
+  for (i = 0; i < map->size.num_cols; i++)
+  {
     map->_map[j][i] = WALL;
   }
 }
 
-static void 
+static void
 cleanup_map (Map *map)
 {
   gint i, j;
 
   /* make sure there is a wall at top/bottom */
-
-  for (i = 0; i < map->size.num_cols; i++) {
+  for (i = 0; i < map->size.num_cols; i++)
+  {
     map->_map[0][i] = WALL;
     map->_map[map->size.num_rows - 1][i] = WALL;
   }
 
   /* make sure there is a wall at left/right */
-
-  for (j = 0; j < map->size.num_rows; j++) {
+  for (j = 0; j < map->size.num_rows; j++)
+  {
     map->_map[j][0] = WALL;
     map->_map[j][map->size.num_cols - 1] = WALL;
   }
 }
 
 static void
-map_set_property (GObject * object, guint prop_id,
-    const GValue * value, GParamSpec * pspec)
+map_set_property (GObject *object, guint prop_id,
+          const GValue *value, GParamSpec *pspec)
 {
   Map *map;
   guint i;
@@ -213,37 +213,41 @@ map_set_property (GObject * object, guint prop_id,
 
   map = MAP (object);
 
-  switch (prop_id) {
-    case ARG_SIZE:
-      /* Free the map if any */
-      if (map->_map != NULL) {
-        for (i = 0; i < map->size.num_rows; i++) {
-          g_free (map->_map[i]);
-        }
-
-        g_free (map->_map);
+  switch (prop_id)
+  {
+  case ARG_SIZE:
+    /* Free the map if any */
+    if (map->_map != NULL)
+    {
+      for (i = 0; i < map->size.num_rows; i++)
+      {
+        g_free (map->_map[i]);
       }
 
-      /* Get the new size of the map */
-      g_memmove (&map->size, g_value_get_pointer (value), sizeof (MapSize)); 
-  
-      /* Allocate the according to the new size */
-      map->_map = g_malloc (map->size.num_rows * sizeof (gint **));
+      g_free (map->_map);
+    }
 
-      for (i = 0; i < map->size.num_rows; i++) {
-        map->_map[i] = g_malloc (map->size.num_cols * sizeof (gint));
-      }
+    /* Get the new size of the map */
+    g_memmove (&map->size, g_value_get_pointer (value), sizeof (MapSize));
 
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
+    /* Allocate the according to the new size */
+    map->_map = g_malloc (map->size.num_rows * sizeof (gint **));
+
+    for (i = 0; i < map->size.num_rows; i++)
+    {
+      map->_map[i] = g_malloc (map->size.num_cols * sizeof (gint));
+    }
+
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
   }
 }
 
 static void
-map_get_property (GObject * object, guint prop_id,
-    GValue * value, GParamSpec * pspec)
+map_get_property (GObject *object, guint prop_id,
+          GValue *value, GParamSpec *pspec)
 {
   Map *map;
 
@@ -252,13 +256,14 @@ map_get_property (GObject * object, guint prop_id,
 
   map = MAP (object);
 
-  switch (prop_id) {
-    case ARG_SIZE:
-      g_value_set_pointer (value, g_memdup (&map->size, sizeof (MapSize)));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
+  switch (prop_id)
+  {
+  case ARG_SIZE:
+    g_value_set_pointer (value, g_memdup (&map->size, sizeof (MapSize)));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
   }
 }
 
@@ -277,10 +282,9 @@ map_new_from_file (const gchar *map_file, gint num_rows, gint num_cols)
 
   stream = fopen (map_file, "r");
 
-  if (stream != NULL) {
-    map = MAP (g_object_new (map_get_type (),
-			"size", &size,
-			NULL));
+  if (stream != NULL)
+  {
+    map = MAP (g_object_new (map_get_type (), "size", &size, NULL));
     fload_map (map, stream);
     fclose (stream);
     cleanup_map (map);
@@ -289,9 +293,9 @@ map_new_from_file (const gchar *map_file, gint num_rows, gint num_cols)
   }
 
   /* else, no file to open */
-  else {
+  else
+  {
     g_warning ("Could not open map file: %s\n", map_file);
     return NULL;
   }
 }
-
