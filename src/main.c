@@ -1,49 +1,52 @@
 /* $Id: main.c,v 1.28 2005/09/06 19:55:40 zeenix Exp $ */
 /*
-   GNU Robots game engine.  This is the main() program, using GNU
-   Guile as my backend to handle the language.
-
-   Copyright (C) 1998 Jim Hall, jhall1@isd.net
-
-   GNU Robots is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   GNU Robots is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with GNU Robots; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ * GNU Robots game engine.  This is the main() program, using GNU
+ * Guile as my backend to handle the language.
+ *
+ * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+ * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
+ *
+ * GNU Robots is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Robots is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GNU Robots; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #include <stdio.h>
-#include <unistd.h>             /* for getopt */
-#include <string.h>             /* for strdup */
+#include <unistd.h>     /* for getopt */
+#include <string.h>     /* for strdup */
 
 #include <glib.h>
 #include <gmodule.h>
 
 #include <libguile.h>
 
-#include <getopt.h>             /* for GNU getopt_long */
-#include <ltdl.h>		/* For loading our ui plugins */
+#include <getopt.h>     /* for GNU getopt_long */
+#include <ltdl.h>       /* For loading our ui plugins */
 
-#include "grobot.h"             /* the robot structure, and robot manipulation routines */
-#include "api.h"                /* robot API, as Scheme functions */
+#include "grobot.h"     /* the robot structure, and robot manipulation
+                           routines */
+
+#include "api.h"        /* robot API, as Scheme functions */
 #include "userinterface.h"
 #include "config.h"
 #include "configs.h"
-#include "map.h"                /* Game Map */
-#include "main.h"               /* for this source file */
+#include "map.h"        /* Game Map */
+#include "main.h"       /* for this source file */
 
 #define BUFF_LEN 1024
 #define MODULE_PREFIX "grobots-"
-#define MODULE_PATH_MAX 256 
-#define MODULE_NAME_MAX 256 
+#define MODULE_PATH_MAX 256
+#define MODULE_NAME_MAX 256
 
 /* Plugins we should know about STATICALLY */
 #define X11_MODULE "x11"
@@ -51,26 +54,25 @@
 
 /* Globals (share with api.c) */
 GList *robots = NULL;
-GRobot *robot = NULL;             // The current robot
+GRobot *robot = NULL;       // The current robot
 UserInterface *ui;
 Map *map;
 GModule *plugin;
 
-UserInterface * load_ui_module (gchar *module_name, Map *map);
+UserInterface *load_ui_module (gchar *module_name, Map *map);
 SCM catch_handler (void *data, SCM tag, SCM throw_args);
 
 /************************************************************************
- * main()                                                               *
- * The program starts here!                                             *
+ * gint main(gint argc, gchar *argv[])                                  *
+ *                                                                      *
+ * Entry point                                                          *
  ************************************************************************/
-
 gint
 main (gint argc, gchar *argv[])
 {
-  gint opt;                      /* the option read from getopt */
+  gint opt;         /* the option read from getopt */
+  gint flag;        /* flag passed back from getopt - NOT USED */
 
-  gint flag;                     /* flag passed back from getopt - NOT
-                                   USED */
   gchar maps_path[MAX_PATH], scripts_path[MAX_PATH];
 
   gchar *main_argv[5] = { "GNU Robots",
@@ -96,130 +98,124 @@ main (gint argc, gchar *argv[])
   /* Check command line */
 
   /* Create a robot Object */
-  robot = g_robot_new (1, 1, 1, 0, DEFAULT_ENERGY, DEFAULT_SHIELDS, 0, 0, NULL, NULL);
+  robot = g_robot_new (1, 1, 1, 0, DEFAULT_ENERGY, DEFAULT_SHIELDS, 0, 0,
+               NULL, NULL);
 
   g_assert (robot != NULL);
 
   /* And add to to the list of robots */
   robots = g_list_append (robots, robot);
 
-  while ((opt = getopt_long (argc, argv, "Vhf:s:e:p:", long_opts, &flag)) != EOF) {
-    switch (opt) {
-      case 'V':
+  while ((opt = getopt_long (argc, argv, "Vhf:s:e:p:", long_opts,
+                 &flag)) != EOF)
+  {
+    switch (opt)
+    {
+    case 'V':
+      /* Display version, then quit */
+      g_printf ("\n%s\n", PKGINFO);
+      g_printf ("%s\n", COPYRIGHT);
+      g_printf
+    ("\nGNU Robots is free software; you can redistribute it and/or modify\n"
+     "it under the terms of the GNU General Public License as published by\n"
+     "the Free Software Foundation; either version 2 of the License, or\n"
+     "(at your option) any later version.\n");
+      g_printf
+    ("\nGNU Robots is distributed in the hope that it will be useful,\n"
+     "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+     "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+     "GNU General Public License for more details.\n");
+      g_printf
+    ("\nYou should have received a copy of the GNU General Public License\n"
+     "along with GNU Robots; if not, write to the Free Software\n"
+     "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n");
+      exit (0);
+      break;
 
-        /* Display version, then quit */
-        g_printf ("\n%s\n", PKGINFO);
-        g_printf ("%s\n", COPYRIGHT);
-	g_printf ("\nGNU Robots is free software; you can redistribute it and/or modify\n"
-		  "it under the terms of the GNU General Public License as published by\n"
-		  "the Free Software Foundation; either version 2 of the License, or\n"
-		  "(at your option) any later version.\n");
-	g_printf ("\nGNU Robots is distributed in the hope that it will be useful,\n"
-		  "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-		  "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-		  "GNU General Public License for more details.\n");
-	g_printf ("\nYou should have received a copy of the GNU General Public License\n"
-		  "along with GNU Robots; if not, write to the Free Software\n"
-		  "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n");
-        exit (0);
-        break;
+    case 'h':
+      /* Display help, then quit. */
+      usage (argv[0]);
+      exit (0);
+      break;
 
-      case 'h':
+    case 'f':
+      /* Set map file */
+      main_argv[1] = optarg;    /* pointer assignment */
+      break;
 
-        /* Display help, then quit. */
+    case 's':
+      /* Set shields */
+      robot->shields = (glong) atol (optarg);
+      break;
 
-        usage (argv[0]);
-        exit (0);
+    case 'e':
+      /* Set energy */
+      robot->energy = (glong) atol (optarg);
+      break;
 
-        break;
+    case 'p':
+      /* Set plugin */
+      main_argv[3] = optarg;    /* pointer assignment */
+      break;
 
-      case 'f':
-
-        /* Set map file */
-
-        main_argv[1] = optarg;  /* pointer assignment */
-
-        break;
-
-      case 's':
-
-        /* Set shields */
-
-        robot->shields = (glong) atol (optarg);
-
-        break;
-
-      case 'e':
-
-        /* Set energy */
-
-        robot->energy = (glong) atol (optarg);
-
-        break;
-
-      case 'p':
-
-        /* Set plugin */
-
-        main_argv[3] = optarg;  /* pointer assignment */
-
-        break;
-
-      default:
-
-        /* invalid option */
-
-        usage (argv[0]);
-        exit (1);
-
-        break;
-    }                           /* switch */
-  }                             /* while */
+    default:
+      /* invalid option */
+      usage (argv[0]);
+      exit (1);
+      break;
+    }               /* switch */
+  }             /* while */
 
   /* Extra arg is the Scheme file */
 
-  if (optind < argc) {
+  if (optind < argc)
+  {
     /* Set Scheme file */
-
-    main_argv[2] = argv[optind];        /* pointer assignment */
+    main_argv[2] = argv[optind];    /* pointer assignment */
   }
 
   /* Check that files have been given */
-  if (main_argv[1] == NULL) {
-    main_argv[1] = g_malloc (MAX_PATH); 
+  if (main_argv[1] == NULL)
+  {
+    main_argv[1] = g_malloc (MAX_PATH);
     g_strlcpy (main_argv[1], DEFAULT_MAP, MAX_PATH);
     g_fprintf (stderr, "map file not specified, trying default: %s\n",
-        main_argv[1]);
+           main_argv[1]);
   }
 
   /* Check that files exist */
   g_strlcpy (maps_path, main_argv[1], MAX_PATH);
 
-  if (!is_file_readable (maps_path)) {
+  if (!is_file_readable (maps_path))
+  {
     g_strlcpy (maps_path, MAPS_PATH, MAX_PATH);
     g_strlcat (maps_path, "/", MAX_PATH);
     g_strlcat (maps_path, main_argv[1], MAX_PATH);
 
-    if (!is_file_readable (maps_path)) {
+    if (!is_file_readable (maps_path))
+    {
       gchar *env = getenv (MAPS_PATH_ENV);
 
-      if (env != NULL) {
+      if (env != NULL)
+      {
         g_strlcpy (maps_path, env, MAX_PATH);
         g_strlcat (maps_path, "/", MAX_PATH);
         g_strlcat (maps_path, main_argv[1], MAX_PATH);
 
-        if (!is_file_readable (maps_path)) {
-          g_fprintf (stderr, 
-		   "%s: %s: game map file does not exist or is not readable\n",
-        	   argv[0], main_argv[1]);
+        if (!is_file_readable (maps_path))
+        {
+          g_fprintf (stderr,
+                  "%s: %s: game map file does not exist or is not \
+                  readable\n",
+                  argv[0], main_argv[1]);
           exit (1);
-	}
+        }
       }
-
-      else {
-        g_fprintf (stderr, 
-	   "%s: %s: game map file does not exist or is not readable\n",
-           argv[0], main_argv[1]);
+      else
+      {
+        g_fprintf (stderr,
+                "%s: %s: game map file does not exist or is not readable\n",
+                argv[0], main_argv[1]);
         exit (1);
       }
     }
@@ -228,43 +224,49 @@ main (gint argc, gchar *argv[])
   main_argv[1] = maps_path;
 
   /* Now the Scheme file */
-  if (main_argv[2] != NULL) {
+  if (main_argv[2] != NULL)
+  {
     g_strlcpy (scripts_path, main_argv[2], MAX_PATH);
 
-    if (!is_file_readable (scripts_path)) {
+    if (!is_file_readable (scripts_path))
+    {
       g_strlcpy (scripts_path, SCRIPTS_PATH, MAX_PATH);
       g_strlcat (scripts_path, "/", MAX_PATH);
       g_strlcat (scripts_path, main_argv[2], MAX_PATH);
 
-      if (!is_file_readable (scripts_path)) {
+      if (!is_file_readable (scripts_path))
+      {
         gchar *env = getenv (SCRIPTS_PATH_ENV);
 
-        if (env != NULL) {
+        if (env != NULL)
+        {
           g_strlcpy (scripts_path, env, MAX_PATH);
           g_strlcat (scripts_path, "/", MAX_PATH);
           g_strlcat (scripts_path, main_argv[2], MAX_PATH);
 
-          if (!is_file_readable (scripts_path)) {
-    	     g_fprintf (stderr, 
-		  "%s: %s: Scheme file does not exist or is not readable\n",
-        	  argv[0], main_argv[2]);
-	     exit (1);
+          if (!is_file_readable (scripts_path))
+          {
+            g_fprintf (stderr,
+                    "%s: %s: Scheme file does not exist or is not \
+                    readable\n",
+                    argv[0], main_argv[2]);
+            exit (1);
           }
         }
-
-	else {
-    	  g_fprintf (stderr, 
-	  	"%s: %s: Scheme file does not exist or is not readable\n",
-        	argv[0], main_argv[2]);
-	  exit (1);
-	}
+        else
+        {
+          g_fprintf (stderr,
+                  "%s: %s: Scheme file does not exist or is not readable\n",
+                  argv[0], main_argv[2]);
+          exit (1);
+        }
       }
     }
-  
+
     main_argv[2] = scripts_path;
   }
-
-  else {
+  else
+  {
     /* argv[2] can't be NULL as argv[3] may also be NULL */
     main_argv[2] = "";
   }
@@ -273,23 +275,24 @@ main (gint argc, gchar *argv[])
   g_printf ("%s\n", PKGINFO);
   g_printf ("%s\n", COPYRIGHT);
   g_printf ("GNU Robots comes with ABSOLUTELY NO WARRANTY\n");
-  g_printf ("This is free software, and you are welcome to redistribute it\n");
-  g_printf ("under certain conditions; see the file `COPYING' for details.\n");
+  g_printf
+    ("This is free software, and you are welcome to redistribute it\n");
+  g_printf
+    ("under certain conditions; see the file `COPYING' for details.\n");
   g_printf ("Loading Guile ... Please wait\n\n");
 
   scm_boot_guile (3, main_argv, main_prog, NULL);
 
-  return 0;                     /* never gets here, but keeps compiler
-                                   happy */
+  return 0;         /* never gets here, but keeps compiler happy */
 }
 
 /************************************************************************
- * main_prog()                                                          *
- * the main program code that is executed after Guile starts up.  Pass  *
- * the Scheme program as argv[1] and the map file as argv[2].  The      *
+ * void main_prog(void *closure, gint argc, gchar *argv[])              *
+ *                                                                      *
+ * The main program code that is executed after Guile starts up. Pass   *
+ * the Scheme program as argv[1] and the map file as argv[2]. The       *
  * program name is still argv[0].                                       *
  ************************************************************************/
-
 void
 main_prog (void *closure, gint argc, gchar *argv[])
 {
@@ -304,51 +307,51 @@ main_prog (void *closure, gint argc, gchar *argv[])
 
   map = map_new_from_file (map_file, DEFAULT_MAP_ROWS, DEFAULT_MAP_COLUMNS);
 
-  if (map == NULL) {
+  if (map == NULL)
+  {
     exit_nicely ();
   }
 
   /* ensure the robot is placed properly */
   MAP_SET_OBJECT (map,
-		  G_ROBOT_POSITION_Y (robot), 
-		  G_ROBOT_POSITION_X (robot),
-		  ROBOT);
+          G_ROBOT_POSITION_Y (robot),
+          G_ROBOT_POSITION_X (robot), ROBOT);
 
   ui = load_ui_module (module, map);
-  
-  if (ui == NULL) {
+
+  if (ui == NULL)
+  {
     exit_nicely ();
   }
 
   /* Now initialize the rest of the Robot properties */
-  g_object_set (G_OBJECT (robot), 
-	"user-interface", G_OBJECT (ui), 
-	"map", G_OBJECT (map),
-	NULL);
+  g_object_set (G_OBJECT (robot),
+        "user-interface", G_OBJECT (ui), "map", G_OBJECT (map), NULL);
 
   g_signal_connect (G_OBJECT (robot), "death", G_CALLBACK (death), NULL);
 
   /* draw the map */
   user_interface_draw (ui);
 
-  if (strlen (robot_program) != 0) {
+  if (strlen (robot_program) != 0)
+  {
     /* execute a Scheme file */
     g_printf ("Robot program: %s\n", robot_program);
     scm_c_primitive_load (robot_program);
   }
 
-  else {
+  else
+  {
     gchar buff[BUFF_LEN];
     SCM value;
-    
+
     g_printf ("Robot program not specified. Entering interactive mode..\n");
-    while (1) {
+    while (1)
+    {
       user_interface_get_string (ui, "guile> ", buff, BUFF_LEN);
       value = scm_internal_catch (SCM_BOOL_T,
-	    (scm_t_catch_body) scm_c_eval_string,
-	    (void *) buff,
-	    catch_handler,
-	    NULL);
+                  (scm_t_catch_body) scm_c_eval_string,
+                  (void *) buff, catch_handler, NULL);
     }
   }
 
@@ -357,22 +360,24 @@ main_prog (void *closure, gint argc, gchar *argv[])
 }
 
 /************************************************************************
- * catch_handler (void *data, SCM tag, SCM throw_args);
- *
- * Responsible for handling errors
- *************************************************************************/
-
-SCM catch_handler (void *data, SCM tag, SCM throw_args)
+ * SCM catch_handler (void *data, SCM tag, SCM throw_args);             *
+ *                                                                      *
+ * Responsible for handling errors                                      *
+ ************************************************************************/
+SCM
+catch_handler (void *data, SCM tag, SCM throw_args)
 {
   gchar *message = "Could'nt get error message\n";
-  
-  if(scm_ilength (throw_args) > 1 && 
-	  SCM_NFALSEP (scm_string_p (SCM_CADR (throw_args)))) {
-     message = SCM_STRING_CHARS (SCM_CADR (throw_args));
+
+  if (scm_ilength (throw_args) > 1
+      && SCM_NFALSEP (scm_string_p (SCM_CADR (throw_args))))
+  {
+    message = SCM_STRING_CHARS (SCM_CADR (throw_args));
   }
 
-  else if (SCM_NFALSEP (scm_symbol_p (tag))) {
-     message = SCM_SYMBOL_CHARS (tag);
+  else if (SCM_NFALSEP (scm_symbol_p (tag)))
+  {
+    message = SCM_SYMBOL_CHARS (tag);
   }
 
   user_interface_update_status (ui, message, -1, -1, -1);
@@ -380,7 +385,8 @@ SCM catch_handler (void *data, SCM tag, SCM throw_args)
   return SCM_BOOL_F;
 }
 
-void death (GRobot *robot)
+void
+death (GRobot *robot)
 {
   /* We get a ref increment on a signal */
   g_object_unref (G_OBJECT (robot));
@@ -388,7 +394,8 @@ void death (GRobot *robot)
   exit_nicely ();
 }
 
-UserInterface * load_ui_module (gchar *module_name, Map *map)
+UserInterface *
+load_ui_module (gchar *module_name, Map *map)
 {
   UserInterface *ui = NULL;
   UserInterfaceInitFunc user_interface_new = NULL;
@@ -398,63 +405,75 @@ UserInterface * load_ui_module (gchar *module_name, Map *map)
   gint errors = 0;
   const char *path = getenv (MODULE_PATH_ENV);
 
-  if (!g_module_supported ()) {
+  if (!g_module_supported ())
+  {
     g_printf ("load_ui_module: %s\n", g_module_error ());
     return;
   }
 
-  if (path != NULL) {
+  if (path != NULL)
+  {
     g_strlcpy (module_path, path, MODULE_PATH_MAX);
   }
 
-  else {
+  else
+  {
     g_strlcpy (module_path, MODULE_PATH, MODULE_PATH_MAX);
   }
-  
+
   /* Load the module. */
   g_strlcpy (module_full_name, MODULE_PREFIX, MODULE_NAME_MAX);
 
-  if (module_name != NULL) {
+  if (module_name != NULL)
+  {
     g_strlcat (module_full_name, module_name, MODULE_NAME_MAX);
   }
 
-  else {
-    if (getenv ("DISPLAY") != NULL) {
-       /* Yuppi! we have x */
-       g_strlcat (module_full_name, X11_MODULE, MODULE_NAME_MAX);
+  else
+  {
+    if (getenv ("DISPLAY") != NULL)
+    {
+      /* Yuppi! we have x */
+      g_strlcat (module_full_name, X11_MODULE, MODULE_NAME_MAX);
     }
 
-    else {
-       g_strlcat (module_full_name, CURSES_MODULE, MODULE_NAME_MAX);
+    else
+    {
+      g_strlcat (module_full_name, CURSES_MODULE, MODULE_NAME_MAX);
     }
   }
 
   module_full_path = g_module_build_path (module_path, module_full_name);
   plugin = g_module_open (module_full_path, 0);
   g_free (module_full_path);
-  
+
   /* Find our handles. */
-  if (plugin) {
-    if (!(g_module_symbol (plugin, USER_INTERFACE_INIT_FUNCTION, (gpointer) &user_interface_new))) {
+  if (plugin)
+  {
+    if (!(g_module_symbol (plugin, USER_INTERFACE_INIT_FUNCTION,
+               (gpointer) & user_interface_new)))
+    {
       g_printf ("load_ui_module: %s\n", g_module_error ());
       g_module_close (plugin);
       plugin = NULL;
     }
-
-    else {
+    else
+    {
       ui = user_interface_new (map, user_interface_get_type ());
     }
   }
-    
-  else {
-    g_printf ("error loading module '%s': %s\n", module_name, g_module_error ());
+  else
+  {
+    g_printf ("error loading module '%s': %s\n", module_name,
+          g_module_error ());
   }
 
   return ui;
 }
 
 /************************************************************************
- * exit_nicely()                                                        *
+ * void exit_nicely()                                                   *
+ *                                                                      *
  * A function that allows the program to exit nicely, after freeing all *
  * memory pointers, etc.                                                *
  ************************************************************************/
@@ -464,29 +483,29 @@ exit_nicely ()
   glong score, energy, shields, shots, units;
 
   /* Stop the UI */
-  if (ui != NULL) {
+  if (ui != NULL)
+  {
     g_object_unref (G_OBJECT (ui));
   }
 
   /* Get rid of the map object */
-  if (map != NULL) {
+  if (map != NULL)
+  {
     g_object_unref (G_OBJECT (map));
   }
 
   /* Show statistics */
-  g_object_get (G_OBJECT (robot), 
-	"shields", &shields, 
-	"energy", &energy,
-	"units", &units,
-	"shots", &shots,
-	"score", &score,
-	NULL);
+  g_object_get (G_OBJECT (robot),
+        "shields", &shields,
+        "energy", &energy,
+        "units", &units, "shots", &shots, "score", &score, NULL);
 
   g_list_foreach (robots, g_object_unref, NULL);
   g_list_free (robots);
 
   /* unload the plugin */
-  if (plugin != NULL) {
+  if (plugin != NULL)
+  {
     g_module_close (plugin);
   }
 
@@ -498,11 +517,13 @@ exit_nicely ()
   g_printf ("Score: %ld\n", score);
 
   /* Show results, if any */
-  if (shields < 1) {
+  if (shields < 1)
+  {
     g_printf ("** Robot took too much damage, and died.\n");
   }
 
-  else if (energy < 1) {
+  else if (energy < 1)
+  {
     g_printf ("** Robot ran out of energy.\n");
   }
 
@@ -511,55 +532,58 @@ exit_nicely ()
 }
 
 /************************************************************************
- * usage()                                                              *
- * A function that prints the usage of GNU Robots to the user.  Assume  *
- * text mode for this function.  We have not initialized X Windows or   *
+ * void usage(const gchar *argv0)                                       *
+ *                                                                      *
+ * A function that prints the usage of GNU Robots to the user. Assume   *
+ * text mode for this function. We have not initialized X Windows or    *
  * curses yet.                                                          *
  ************************************************************************/
-
 void
 usage (const gchar *argv0)
 {
   g_printf ("%s\n", PKGINFO);
   g_printf ("%s\n", COPYRIGHT);
-  g_printf ("Game/diversion where you construct a program for a little robot\n");
-  g_printf ("then set him loose and watch him explore a world on his own.\n\n");
+  g_printf
+    ("Game/diversion where you construct a program for a little robot\n");
+  g_printf
+    ("then set him loose and watch him explore a world on his own.\n\n");
 
   g_printf ("Usage: %s [OPTION]... [FILE]\n\n", argv0);
-  g_printf ("  -f, --map-file=FILE    Load map file (this option is required)\n");
+  g_printf
+    ("  -f, --map-file=FILE    Load map file (this option is required)\n");
   g_printf ("  -p, --plugin=PLUGIN    Use plugin PLUGIN\n");
   g_printf ("  -s, --shields=N        Set initial shields to N\n");
   g_printf ("  -e, --energy=N         Set initial energy to N\n");
   g_printf ("  -V, --version          Output version information and exit\n");
   g_printf ("  -h, --help             Display this help and exit\n");
-  g_printf ("\nNote: FILE refers to a scheme file and %s enters into \n", argv0);
+  g_printf ("\nNote: FILE refers to a scheme file and %s enters into \n",
+        argv0);
   g_printf ("      an interactive mode if it is not specified.\n");
 
   g_printf ("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
 }
 
 /************************************************************************
- * is_file_readable ()                                                  *
- * Checks if a file is a readable file.  We will use this function as   *
+ * gint is_file_readable (const gchar *filename)                        *
+ *                                                                      *
+ * Checks if a file is a readable file. We will use this function as    *
  * part of a sanity check, before we get anywhere near having to open   *
- * files.  This will save on error checking later on, when we may have  *
+ * files. This will save on error checking later on, when we may have   *
  * already initialized another environment (Curses, X Windows, ...)     *
  ************************************************************************/
-
 gint
 is_file_readable (const gchar *filename)
 {
   FILE *stream;
 
   stream = fopen (filename, "r");
-  if (stream == NULL) {
+  if (stream == NULL)
+  {
     /* Failed */
-
     return (0);
   }
 
   /* Success */
-
   fclose (stream);
   return (1);
 }
