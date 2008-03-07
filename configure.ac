@@ -1,6 +1,7 @@
 dnl
 dnl configure.ac for GNU Robots
-dnl Copyright (C) 1998 Jim Hall, jhall1@isd.net
+dnl Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+dnl Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
 dnl
 dnl GNU Robots is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
