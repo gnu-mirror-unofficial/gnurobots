@@ -579,12 +579,6 @@ inline void x11_plugin_get_string (X11Plugin *x11,
 				       gchar *buff, 
 				       gint len)
 {
-  /* You want me to write a text-box using xlib? 
-   * You got to be kidding me
-   * */
-/*  fputs (prompt, stdout); */
-/*  fgets (buff, len, stdin); */
-
   char* line = (char*)NULL;
 
   line = readline(prompt);
