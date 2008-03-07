@@ -122,6 +122,38 @@ if test "x$HAVE_GLIB2" = "xno"; then
   AC_MSG_ERROR([GNU Robots requires GLib2 to compile.])
 fi
 
+AC_CHECK_FUNC(tgetent,
+	[READLINE_EXTRA=],
+	[AC_CHECK_LIB(curses, tgetent,
+		[READLINE_EXTRA=-lcurses],
+		[AC_CHECK_LIB(ncurses, tgetent,
+			[READLINE_EXTRA=-lncurses],
+			[AC_CHECK_LIB(termcap, tgetent,
+				[READLINE_EXTRA=-ltermcap],
+				[AC_MSG_WARN(No Termcap or Curses library found)])
+			])
+		])
+	])
+
+AC_CHECK_LIB(readline,readline,[READLINE_LIBS=-lreadline],
+	AC_MSG_ERROR([
+
+You need the GNU Readline library to build this program.
+
+]),[$READLINE_EXTRA])
+
+AC_CHECK_HEADER(readline/readline.h,[READLINE_CFLAGS=-I/usr/include/readline/],
+	AC_MSG_ERROR([
+
+You need the GNU Readline headers to build this program.
+
+]))
+
+READLINE_LIBS="$READLINE_LIBS $READLINE_EXTRA"
+
+AC_SUBST(READLINE_LIBS)
+AC_SUBST(READLINE_CFLAGS)
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h)

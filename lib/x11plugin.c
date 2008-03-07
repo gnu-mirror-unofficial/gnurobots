@@ -27,6 +27,8 @@
 #include "configs.h"
 #include "x11plugin.h"
 
+#include <readline.h>
+
 enum
 {
   ARG_0,
@@ -580,8 +582,23 @@ inline void x11_plugin_get_string (X11Plugin *x11,
   /* You want me to write a text-box using xlib? 
    * You got to be kidding me
    * */
-  fputs (prompt, stdout);
-  fgets (buff, len, stdin);
+/*  fputs (prompt, stdout); */
+/*  fgets (buff, len, stdin); */
+
+  char* line = (char*)NULL;
+
+  line = readline(prompt);
+
+  if(line && *line)
+  {
+    add_history(line);
+
+    g_strlcpy(buff, line, len);
+  }
+  else
+    buff = "";
+
+  free(line);
 }
 
 inline void x11_update_status (X11Plugin *x11,

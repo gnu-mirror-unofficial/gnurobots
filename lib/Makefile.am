@@ -30,7 +30,7 @@ else
 X11_PLUGIN=
 endif
 
-INCLUDES = $(GLIB2_CFLAGS) $(CURSES_CFLAGS) $(X_FLAGS) -I$(top_builddir)/include
+INCLUDES = $(GLIB2_CFLAGS) $(CURSES_CFLAGS) $(X_FLAGS) -I$(top_builddir)/include $(READLINE_CFLAGS)
 
 pkglib_LTLIBRARIES  = libgrobots-text.la $(CURSES_PLUGIN) $(X11_PLUGIN)
 
@@ -44,5 +44,5 @@ libgrobots_curses_la_LIBADD = $(GLIB2_LIBS) $(CURSES_LIBS)
 
 libgrobots_x11_la_SOURCES = x11plugin.c
 libgrobots_x11_la_LDFLAGS = -module -avoid-version
-libgrobots_x11_la_LIBADD = $(GLIB2_LIBS) $(X_LIBS)
+libgrobots_x11_la_LIBADD = $(GLIB2_LIBS) $(X_LIBS) $(READLINE_LIBS)
 
