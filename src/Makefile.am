@@ -9,4 +9,3 @@ INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
 
 grobots_SOURCES = main.c api.c sign.c map.c grobot.c userinterface.c
 grobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) -lltdl
-

@@ -130,6 +130,7 @@ curses_plugin_constructor (GType type,
 {
   GObject *object;
   CursesPlugin *curses;
+  gint color_pair;
 
   /* Chain up to the parent first */
   object = parent_class->constructor (type, n_construct_properties, construct_properties);
@@ -137,8 +138,6 @@ curses_plugin_constructor (GType type,
   curses = CURSES_PLUGIN (object);
 
   /* Initialize curses mode */
-  gint color_pair;
-
   curses->win = initscr ();
 
   cbreak ();
@@ -147,7 +146,7 @@ curses_plugin_constructor (GType type,
   scrollok (curses->win, TRUE); 	/* Put scrolling on */
   setscrreg (LINES - 2, LINES - 1);	/* Where to scroll  */
 
-  //clearok (stdscr, TRUE);
+  /* clearok (stdscr, TRUE); */
   nonl ();
   intrflush (stdscr, FALSE);
   keypad (stdscr, TRUE);
@@ -262,6 +261,8 @@ curses_plugin_get_property (GObject * object, guint prop_id,
 UserInterface *
 user_interface_new (Map *map, GType parent_type)
 {
+  CursesPlugin *curses;
+
   g_return_val_if_fail (map != NULL, NULL);
   g_return_val_if_fail (_parent_type != 0 || parent_type != 0, NULL);
 
@@ -269,8 +270,7 @@ user_interface_new (Map *map, GType parent_type)
      _parent_type = parent_type;
   }
 
-  CursesPlugin *curses =
-  	CURSES_PLUGIN (g_object_new (curses_plugin_get_type (),
+  curses = CURSES_PLUGIN (g_object_new (curses_plugin_get_type (),
 				  "map", map,
 				  NULL));
   if (curses->errors) {

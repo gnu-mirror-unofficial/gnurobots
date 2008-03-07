@@ -22,6 +22,8 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "configs.h"
 #include "x11plugin.h"
 
@@ -210,17 +212,18 @@ x11_plugin_constructor (GType type,
 
   setup_winbuf (x11);
 
-  //update_status ("Welcome to GNU Robots");
+  /* update_status ("Welcome to GNU Robots"); */
   x11->errors = 0;
 
   return object;
 }
 
-static void 
+static void
 x11_plugin_dispose (GObject * object)
 {
-  X11Plugin *x11 = X11_PLUGIN (object);
- 
+  X11Plugin *x11;
+  x11 = X11_PLUGIN (object);
+
   if (x11->map != NULL) {
     g_object_unref (G_OBJECT (x11->map));
 
@@ -315,6 +318,8 @@ x11_plugin_get_property (GObject * object, guint prop_id,
 UserInterface *
 user_interface_new (Map *map, GType parent_type)
 {
+  X11Plugin *x11;
+
   g_return_val_if_fail (map != NULL, NULL);
   g_return_val_if_fail (_parent_type != 0 || parent_type != 0, NULL);
 
@@ -322,8 +327,7 @@ user_interface_new (Map *map, GType parent_type)
      _parent_type = parent_type;
   }
 
-  X11Plugin *x11 =
-  	X11_PLUGIN (g_object_new (x11_plugin_get_type (),
+  x11 = X11_PLUGIN (g_object_new (x11_plugin_get_type (),
 				  "map", map,
 				  NULL));
   if (x11->errors) {

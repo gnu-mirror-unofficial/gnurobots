@@ -227,6 +227,8 @@ text_plugin_get_property (GObject * object, guint prop_id,
 UserInterface *
 user_interface_new (Map *map, GType parent_type)
 {
+  TextPlugin *text;
+
   g_return_val_if_fail (map != NULL, NULL);
   g_return_val_if_fail (_parent_type != 0 || parent_type != 0, NULL);
 
@@ -234,8 +236,7 @@ user_interface_new (Map *map, GType parent_type)
      _parent_type = parent_type;
   }
 
-  TextPlugin *text =
-  	TEXT_PLUGIN (g_object_new (text_plugin_get_type (),
+  text = TEXT_PLUGIN (g_object_new (text_plugin_get_type (),
 				  "map", map,
 				  NULL));
   if (text->errors) {

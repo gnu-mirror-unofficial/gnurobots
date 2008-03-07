@@ -54,7 +54,7 @@
 
 /* Globals (share with api.c) */
 GList *robots = NULL;
-GRobot *robot = NULL;       // The current robot
+GRobot *robot = NULL;       /* The current robot */
 UserInterface *ui;
 Map *map;
 GModule *plugin;
@@ -500,7 +500,7 @@ exit_nicely ()
         "energy", &energy,
         "units", &units, "shots", &shots, "score", &score, NULL);
 
-  g_list_foreach (robots, g_object_unref, NULL);
+  g_list_foreach (robots, (GFunc)g_object_unref, NULL);
   g_list_free (robots);
 
   /* unload the plugin */
