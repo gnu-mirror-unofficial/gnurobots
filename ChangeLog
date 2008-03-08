@@ -7,6 +7,12 @@
 	* src/main.c:
 		Add error message when given an invalid instruction.
 		Add initial ui update to avoid corruption.
+	* lib/textplugin.c:
+		Add readline support to text plugin
+	* lib/Makefile.am:
+		Add readline libs/includes to text plugin
+	* src/Makefile.am:
+		Change binary name to gnurobots
 
 2008-03-07  Bradley Smith <brad@brad-smith.co.uk>
 
@@ -17,6 +23,8 @@
 		Add readline/history support to command line.
 	* various:
 		Fix code to compile with stricter flags.
+	* lib/Makefile.am:
+		Add readline libs/includes to x11 plugin
 
 2005-09-06  Zeeshan Ali Khattak <zeenix@gmail.com>
 	* src/main.c src/api.c include/api.h include/main.h:

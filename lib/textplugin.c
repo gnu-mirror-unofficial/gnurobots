@@ -23,13 +23,17 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "configs.h"
 #include "textplugin.h"
+
+#include <readline.h>
+#include <history.h>
 
 enum
 {
   ARG_0,
-  ARG_MAP 
+  ARG_MAP
 };
 
 GType _text_plugin_type = 0;
@@ -350,8 +354,20 @@ inline void text_plugin_get_string (TextPlugin *text,
 				       gchar *buff, 
 				       gint len)
 {
-  fputs (prompt, stdout);
-  fgets (buff, len, stdin);
+  char* line = (char*)NULL;
+
+  line = readline(prompt);
+
+  if(line && *line)
+  {
+    add_history(line);
+
+    g_strlcpy(buff, line, len);
+  }
+  else
+    buff = "";
+
+  free(line);
 }
 
 inline void text_plugin_update_status (TextPlugin *text,

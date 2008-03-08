@@ -36,7 +36,7 @@ pkglib_LTLIBRARIES  = libgrobots-text.la $(CURSES_PLUGIN) $(X11_PLUGIN)
 
 libgrobots_text_la_SOURCES = textplugin.c
 libgrobots_text_la_LDFLAGS = -module -avoid-version
-libgrobots_text_la_LIBADD = $(GLIB2_LIBS)
+libgrobots_text_la_LIBADD = $(GLIB2_LIBS) $(READLINE_LIBS)
 
 libgrobots_curses_la_SOURCES = cursesplugin.c
 libgrobots_curses_la_LDFLAGS = -module -avoid-version
