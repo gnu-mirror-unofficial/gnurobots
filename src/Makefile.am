@@ -1,4 +1,4 @@
-bin_PROGRAMS = grobots
+bin_PROGRAMS = gnurobots
 
 INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
 	   -DPKGLIBDIR=\"$(pkglibdir)\" \
@@ -7,5 +7,5 @@ INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
 	   -DMAPS_PATH=\"$(mapsdir)\" \
 	   -DSCRIPTS_PATH=\"$(schemedir)\"
 
-grobots_SOURCES = main.c api.c sign.c map.c grobot.c userinterface.c
-grobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) -lltdl
+gnurobots_SOURCES = main.c api.c sign.c map.c grobot.c userinterface.c
+gnurobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) -lltdl
