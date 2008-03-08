@@ -1,3 +1,13 @@
+2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
+
+	* configure.ac:
+		Add stricter compile flags to build.
+		Add readline libraries.
+	* lib/x11plugin.c:
+		Add readline/history support to command line.
+	* various:
+		Fix code to compile with stricter flags.
+
 2005-09-06  Zeeshan Ali Khattak <zeenix@gmail.com>
 	* src/main.c src/api.c include/api.h include/main.h:
 		Converted to the newer scm_* API.
@@ -11,13 +21,13 @@
 	* include/userinterface.h src/userinterface.c:
 		The userinterface module is no longer a modules loader but
 		an (gobject) interface that all display plugins MUST
-		implement. 
+		implement.
 	* src/main.c:
 		The module loading/unloading has been moved to the main
 		module. Also needed to update the interaction with userinterface
 		module.
 	* configure.ac:
-		We needed properties in interfaces which was'nt supported
+		We needed properties in interfaces which wasn't supported
 		before glib <= 2.4.
 
 2004-10-1  Zeeshan Ali Khattak <zeenix@gmail.com>
@@ -32,16 +42,16 @@
 	  lib/curses.c lib/text.c lib/x11.c
 	  src/Makefile.am src/grobot.c src/main.c src/userinterface.c
 	  src/map.c:
-	  	GObjectized Map code too. Now remains the plugins, but who 
+	  	GObjectized Map code too. Now remains the plugins, but who
 		will bell the cat? :)
 	* src/grobot.c:
-		Act appropriatelly on NULLs rather than g_return_if_fail in 
+		Act appropriatelly on NULLs rather than g_return_if_fail in
 		_set_property.
 
 
 2004-09-24  Zeeshan Ali Khattak <zeenix@gmail.com>
 
-	* include/configs.h include/main.h src/grobot.c 
+	* include/configs.h include/main.h src/grobot.c
 	  src/main.c userinterface.c:
 		BUGFIX: a refcounting problem because of which the UI module
 		did'nt get the chance to destroy itself and you know damn well
