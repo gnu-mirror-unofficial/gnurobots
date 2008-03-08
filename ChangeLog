@@ -4,6 +4,9 @@
 		Correct Map Type, and tidy up.
 	* lib/x11plugin.h:
 		Correct X11_Plugin Type, and tidy up.
+	* src/main.c:
+		Add error message when given an invalid instruction.
+		Add initial ui update to avoid corruption.
 
 2008-03-07  Bradley Smith <brad@brad-smith.co.uk>
 

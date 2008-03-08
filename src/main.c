@@ -347,6 +347,7 @@ main_prog (void *closure, gint argc, gchar *argv[])
     SCM value;
 
     g_printf ("Robot program not specified. Entering interactive mode..\n");
+    user_interface_update_status (ui, "", -1, -1, -1);
     while (1)
     {
       user_interface_get_string (ui, "guile> ", buff, BUFF_LEN);
@@ -368,7 +369,9 @@ main_prog (void *closure, gint argc, gchar *argv[])
 SCM
 catch_handler (void *data, SCM tag, SCM throw_args)
 {
-  gchar *message = "Could'nt get error message\n";
+
+/*
+  gchar *message = "Couldn't get error message\n";
 
   if (scm_ilength (throw_args) > 1
       && SCM_NFALSEP (scm_string_p (SCM_CADR (throw_args))))
@@ -382,6 +385,9 @@ catch_handler (void *data, SCM tag, SCM throw_args)
   }
 
   user_interface_update_status (ui, message, -1, -1, -1);
+*/
+
+  g_printf("Invalid Instruction\n");
 
   return SCM_BOOL_F;
 }
