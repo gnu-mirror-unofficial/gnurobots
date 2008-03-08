@@ -1,23 +1,22 @@
 /* $Id: x11plugin.h,v 1.1 2004/10/21 19:24:30 zeenix Exp $ */
-
-/* GNU Robots game engine. */
-
-/* Copyright (C) 1998 Jim Hall, jhall1@isd.net */
-
-/*
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+/* GNU Robots game engine.
+ *
+ * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+ * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GNU Robots; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 #ifndef __X11_PLUGIN_H__
@@ -34,9 +33,8 @@
 
 G_BEGIN_DECLS
 
-extern GType _x11_plugin_type;
-
 typedef struct _X11Plugin X11Plugin;
+typedef struct _X11PluginClass X11PluginClass;
 
 struct _X11Plugin {
   GObject 	object;
@@ -54,10 +52,8 @@ struct _X11Plugin {
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
-
-  XShmSegmentInfo 
-	  	shm_info;
-  guchar 	use_mitshm = 1;
+  XShmSegmentInfo shm_info;
+  guchar 	      use_mitshm = 1;
 #endif
 
   gint 		win_width;
@@ -76,21 +72,26 @@ struct _X11Plugin {
   XImage 	*robotPix;
 };
 
-typedef struct _X11PluginClass X11PluginClass;
-
 struct _X11PluginClass {
   GObjectClass	parent_class;
 };
 
-#define G_TYPE_X11_PLUGIN			(_x11_plugin_type)
-#define G_IS_X11_PLUGIN(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_X11_PLUGIN))
-#define G_IS_X11_PLUGIN_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), G_TYPE_X11_PLUGIN))
-#define X11_PLUGIN_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), G_TYPE_X11_PLUGIN, X11PluginClass))
-#define X11_PLUGIN(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_X11_PLUGIN, X11Plugin))
-#define X11_PLUGIN_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), G_TYPE_X11_PLUGIN, X11PluginClass))
+#define G_TYPE_X11_PLUGIN			  (x11_plugin_get_type())
+#define G_IS_X11_PLUGIN(obj)		  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
+                                          G_TYPE_X11_PLUGIN))
+#define G_IS_X11_PLUGIN_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), \
+                                          G_TYPE_X11_PLUGIN))
+#define X11_PLUGIN_GET_CLASS(obj)	  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
+                                          G_TYPE_X11_PLUGIN, \
+                                          X11PluginClass))
+#define X11_PLUGIN(obj)			      (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
+                                          G_TYPE_X11_PLUGIN, X11Plugin))
+#define X11_PLUGIN_CLASS(klass)		  (G_TYPE_CHECK_CLASS_CAST ((klass), \
+                                          G_TYPE_X11_PLUGIN, \
+                                          X11PluginClass))
 
 /* normal GObject stuff */
-GType		x11_plugin_get_type		(void);
+GType       x11_plugin_get_type		(void);
 
 X11Plugin*	x11_plugin_new 			(void);
 
@@ -99,4 +100,4 @@ X11Plugin*	x11_plugin_new 			(void);
 
 G_END_DECLS
 
-#endif /* __X11_PLUGIN_H__*/
+#endif /* __X11_PLUGIN_H__ */

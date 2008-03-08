@@ -281,7 +281,8 @@ map_new_from_file (const gchar *map_file, gint num_rows, gint num_cols)
 
   if (stream != NULL)
   {
-    map = MAP (g_object_new (map_get_type (), "size", &size, NULL));
+    /*map = MAP (g_object_new (map_get_type (), "size", &size, NULL));*/
+    map = MAP(g_object_new (map_get_type(), "size", &size, NULL));
     fload_map (map, stream);
     fclose (stream);
     cleanup_map (map);

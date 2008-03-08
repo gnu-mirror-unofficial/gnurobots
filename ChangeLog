@@ -1,5 +1,12 @@
 2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
 
+	* include/map.h:
+		Correct Map Type, and tidy up.
+	* lib/x11plugin.h:
+		Correct X11_Plugin Type, and tidy up.
+
+2008-03-07  Bradley Smith <brad@brad-smith.co.uk>
+
 	* configure.ac:
 		Add stricter compile flags to build.
 		Add readline libraries.
