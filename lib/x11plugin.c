@@ -21,6 +21,7 @@
  */
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +29,7 @@
 #include "x11plugin.h"
 
 #include <readline.h>
+#include <history.h>
 
 enum
 {
@@ -155,7 +157,6 @@ x11_plugin_constructor (GType type,
   XWMHints wmhints;
   XGCValues values;
   Atom delete_win;
-  gint x;
 
   /* Chain up to the parent first */
   object = parent_class->constructor (type, n_construct_properties, construct_properties);
@@ -613,19 +614,19 @@ inline void x11_update_status (X11Plugin *x11,
   XDrawString (x11->dpy, x11->win_buf, x11->gc, 3, x11->map_size->num_rows * TILE_SIZE + 16, s, strlen (s));
 
   if (energy > -1) {
-    g_sprintf (status, "Robot Energy: %3d", energy);
+    g_sprintf (status, "Robot Energy: %3ld", energy);
     XDrawString (x11->dpy, x11->win_buf, x11->gc, 240, x11->map_size->num_rows * TILE_SIZE + 12, status,
         strlen (status));
   }
 
   if (score > -1) {
-    g_sprintf (status, "Robot Score: %3d", score);
+    g_sprintf (status, "Robot Score: %3ld", score);
     XDrawString (x11->dpy, x11->win_buf, x11->gc, 240, x11->map_size->num_rows * TILE_SIZE + 25, status,
         strlen (status));
   }
 
   if (shields > -1) {
-    g_sprintf (status, "Robot Shields: %3d", shields);
+    g_sprintf (status, "Robot Shields: %3ld", shields);
     XDrawString (x11->dpy, x11->win_buf, x11->gc, 480, x11->map_size->num_rows * TILE_SIZE + 12, status,
         strlen (status));
   }
@@ -637,7 +638,6 @@ inline void x11_plugin_update_status (X11Plugin *x11,
 				   glong score, 
 				   glong shields)
 {
-  gint x;
   XEvent ev;
 
   x11_update_status (x11, s, energy, score, shields);
@@ -671,8 +671,6 @@ shm_error_handler (X11Plugin *x11, Display * d, XErrorEvent * e)
 static void
 setup_winbuf (X11Plugin *x11)
 {
-  gint major, minor;
-  Bool shared;
   XVisualInfo *matches;
   XVisualInfo plate;
   gint count;

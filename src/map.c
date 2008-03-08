@@ -270,10 +270,7 @@ map_get_property (GObject *object, guint prop_id,
 Map *
 map_new_from_file (const gchar *map_file, gint num_rows, gint num_cols)
 {
-  GObject *object;
   Map *map;
-  gint **buf;
-  guint i;
   FILE *stream;
   MapSize size;
 

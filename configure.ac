@@ -162,7 +162,7 @@ AC_CHECK_HEADERS(unistd.h)
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-CFLAGS="-pedantic-errors -Werror"
+CFLAGS="-pedantic-errors -Werror -Wall -Wfatal-errors"
 
 dnl Done.
 AC_CONFIG_FILES([Makefile

@@ -124,17 +124,16 @@ curses_plugin_init (GObject * object)
 }
 
 static GObject *
-curses_plugin_constructor (GType type, 
-    guint n_construct_properties, 
+curses_plugin_constructor (GType type,
+    guint n_construct_properties,
     GObjectConstructParam *construct_properties)
 {
   GObject *object;
   CursesPlugin *curses;
-  gint color_pair;
 
   /* Chain up to the parent first */
   object = parent_class->constructor (type, n_construct_properties, construct_properties);
-  
+
   curses = CURSES_PLUGIN (object);
 
   /* Initialize curses mode */

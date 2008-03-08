@@ -26,6 +26,7 @@
 #include <string.h>     /* for strdup */
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gmodule.h>
 
 #include <libguile.h>
@@ -61,6 +62,7 @@ GModule *plugin;
 
 UserInterface *load_ui_module (gchar *module_name, Map *map);
 SCM catch_handler (void *data, SCM tag, SCM throw_args);
+gint is_file_readable (const gchar *filename);
 
 /************************************************************************
  * gint main(gint argc, gchar *argv[])                                  *
@@ -296,7 +298,6 @@ main (gint argc, gchar *argv[])
 void
 main_prog (void *closure, gint argc, gchar *argv[])
 {
-  gint i;
   gchar *map_file = argv[1];
   gchar *robot_program = argv[2];
   gchar *module = argv[3];
@@ -402,13 +403,12 @@ load_ui_module (gchar *module_name, Map *map)
   gchar module_full_name[MODULE_NAME_MAX];
   gchar module_path[MODULE_PATH_MAX];
   gchar *module_full_path;
-  gint errors = 0;
   const char *path = getenv (MODULE_PATH_ENV);
 
   if (!g_module_supported ())
   {
     g_printf ("load_ui_module: %s\n", g_module_error ());
-    return;
+    return NULL;
   }
 
   if (path != NULL)

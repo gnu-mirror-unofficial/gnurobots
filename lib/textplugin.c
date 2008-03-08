@@ -21,6 +21,7 @@
  */
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include "configs.h"
 #include "textplugin.h"
@@ -127,25 +128,25 @@ text_plugin_init (GObject * object)
 }
 
 static GObject *
-text_plugin_constructor (GType type, 
-    guint n_construct_properties, 
+text_plugin_constructor (GType type,
+    guint n_construct_properties,
     GObjectConstructParam *construct_properties)
 {
   GObject *object;
 
   /* Chain up to the parent first */
   object = parent_class->constructor (type, n_construct_properties, construct_properties);
-  
+
   g_printf ("GNU Robots starting..\n");
-  
+
   return object;
 }
 
-static void 
+static void
 text_plugin_dispose (GObject * object)
 {
   TextPlugin *text = TEXT_PLUGIN (object);
- 
+
   if (text->map != NULL) {
     g_object_unref (G_OBJECT (text->map));
 

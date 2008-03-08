@@ -24,6 +24,9 @@
 #include "userinterface.h"  /* GNU Robots UI */
 #include <stdio.h>
 #include <glib.h>
+#include <string.h>
+#include <stdlib.h>
+#include "sign.h"
 
 enum
 {
