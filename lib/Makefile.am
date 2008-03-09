@@ -46,3 +46,7 @@ libgrobots_x11_la_SOURCES = x11plugin.c
 libgrobots_x11_la_LDFLAGS = -module -avoid-version
 libgrobots_x11_la_LIBADD = $(GLIB2_LIBS) $(X_LIBS) $(READLINE_LIBS)
 
+EXTRA_DIST =\
+	cursesplugin.h \
+	textplugin.h \
+	x11plugin.h
