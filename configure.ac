@@ -158,6 +158,7 @@ AC_SUBST(READLINE_CFLAGS)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h)
+AC_CHECK_HEADERS(getopt.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -168,7 +169,6 @@ dnl Done.
 AC_CONFIG_FILES([Makefile
  contrib/Makefile
  doc/Makefile
- getopt/Makefile
  include/Makefile
  lib/Makefile
  lib/xpm/Makefile
