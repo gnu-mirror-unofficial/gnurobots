@@ -4,6 +4,8 @@
 		Change deprecated SCM_STRING_CHARS to scm_to_locale_string
 	* lib/x11plugin.c:
 		Make window respond to DestroyNotify and ClientMessage
+	* configure.ac:
+		Change version to 1.0.90 for prerelease
 
 2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
 
