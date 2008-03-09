@@ -32,6 +32,20 @@
 
 G_BEGIN_DECLS
 
+#define G_TYPE_X11_PLUGIN			  x11_plugin_get_type()
+#define G_IS_X11_PLUGIN(obj)		  G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
+                                          G_TYPE_X11_PLUGIN)
+#define G_IS_X11_PLUGIN_CLASS(klass)  G_TYPE_CHECK_CLASS_TYPE ((klass), \
+                                          G_TYPE_X11_PLUGIN)
+#define X11_PLUGIN_GET_CLASS(obj)	  G_TYPE_INSTANCE_GET_CLASS ((obj), \
+                                          G_TYPE_X11_PLUGIN, \
+                                          X11PluginClass)
+#define X11_PLUGIN(obj)			      G_TYPE_CHECK_INSTANCE_CAST ((obj), \
+                                          G_TYPE_X11_PLUGIN, X11Plugin)
+#define X11_PLUGIN_CLASS(klass)		  G_TYPE_CHECK_CLASS_CAST ((klass), \
+                                          G_TYPE_X11_PLUGIN, \
+                                          X11PluginClass)
+
 typedef struct _X11Plugin X11Plugin;
 typedef struct _X11PluginClass X11PluginClass;
 
@@ -76,20 +90,6 @@ struct _X11Plugin {
 struct _X11PluginClass {
   GObjectClass	parent_class;
 };
-
-#define G_TYPE_X11_PLUGIN			  (x11_plugin_get_type())
-#define G_IS_X11_PLUGIN(obj)		  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-                                          G_TYPE_X11_PLUGIN))
-#define G_IS_X11_PLUGIN_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), \
-                                          G_TYPE_X11_PLUGIN))
-#define X11_PLUGIN_GET_CLASS(obj)	  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-                                          G_TYPE_X11_PLUGIN, \
-                                          X11PluginClass))
-#define X11_PLUGIN(obj)			      (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-                                          G_TYPE_X11_PLUGIN, X11Plugin))
-#define X11_PLUGIN_CLASS(klass)		  (G_TYPE_CHECK_CLASS_CAST ((klass), \
-                                          G_TYPE_X11_PLUGIN, \
-                                          X11PluginClass))
 
 /* normal GObject stuff */
 GType       x11_plugin_get_type		(void);

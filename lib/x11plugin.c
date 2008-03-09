@@ -29,18 +29,18 @@
 #include <readline.h>
 #include <history.h>
 
+static GType _parent_type = 0;
+static void x11_plugin_interface_init(gpointer g_iface,
+        gpointer iface_data);
+
+G_DEFINE_TYPE_WITH_CODE(X11Plugin, x11_plugin, G_TYPE_OBJECT,
+        G_IMPLEMENT_INTERFACE(_parent_type, x11_plugin_interface_init))
+
 enum
 {
   ARG_0,
   ARG_MAP
 };
-
-GType _x11_plugin_type = 0;
-static GType _parent_type = 0;
-
-static void x11_plugin_class_init (X11PluginClass * klass);
-static void x11_plugin_init (GObject * object);
-static void x11_plugin_interface_init (gpointer g_iface, gpointer iface_data);
 
 static GObject * x11_plugin_constructor (GType type,
     guint n_construct_properties,
@@ -59,50 +59,10 @@ static void put_tile (X11Plugin *x11, XImage *image, gint x, gint y);
 static void put_winbuf (X11Plugin *x11);
 static void setup_winbuf (X11Plugin *x11);
 void create_image (X11Plugin *x11, gchar **data, XImage ** image);
-inline void x11_plugin_update_status (X11Plugin *x11,
-				   const gchar *s,
-				   glong energy,
-				   glong score,
-				   glong shields);
+inline void x11_plugin_update_status (X11Plugin *x11, const gchar *s,
+        glong energy, glong score, glong shields);
 
 static GObjectClass *parent_class = NULL;
-
-GType
-x11_plugin_get_type (void)
-{
-  if (!_x11_plugin_type) {
-    static const GTypeInfo object_info = {
-      sizeof (X11PluginClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) x11_plugin_class_init,
-      NULL,
-      NULL,
-      sizeof (X11Plugin),
-      0,
-      (GInstanceInitFunc) x11_plugin_init,
-      NULL
-    };
-
-    static const GInterfaceInfo interface_info = {
-      (GInterfaceInitFunc) x11_plugin_interface_init,
-      NULL,
-      NULL
-    };
-
-    _x11_plugin_type =
-        g_type_register_static (G_TYPE_OBJECT,
-			"X11Plugin",
-			&object_info,
-			0);
-
-    g_type_add_interface_static (_x11_plugin_type,
-                                 _parent_type,
-                                 &interface_info);
-  }
-
-  return _x11_plugin_type;
-}
 
 static void
 x11_plugin_class_init (X11PluginClass * klass)
@@ -123,10 +83,8 @@ x11_plugin_class_init (X11PluginClass * klass)
 }
 
 static void
-x11_plugin_init (GObject * object)
+x11_plugin_init (X11Plugin* x11)
 {
-  X11Plugin *x11 = X11_PLUGIN (object);
-
   x11->map = NULL;
   x11->map_size = NULL;
 }
