@@ -2,10 +2,14 @@
 
 	* src/api.c:
 		Change deprecated SCM_STRING_CHARS to scm_to_locale_string
-	* lib/x11plugin.c:
-		Make window respond to DestroyNotify and ClientMessage
+	* lib/x11plugin.c lib/x11plugin.c:
+		Make window respond to WM_DESTROY_WINDOW
 	* configure.ac:
 		Change version to 1.0.90 for prerelease
+	* getopt/* Makefile.am configure.ac:
+		Removed getopt.
+	* various:
+		Correct copyright headers.
 
 2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
 
