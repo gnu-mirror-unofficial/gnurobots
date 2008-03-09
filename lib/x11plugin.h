@@ -43,6 +43,8 @@ struct _X11Plugin {
 
   Display 	*dpy;
   Window 	x_win;
+  Atom      wm_delete_win;
+  Atom      wm_protocols;
   GC 		gc;
   GC 		buf_gc;
   Font 		text;

@@ -150,11 +150,9 @@ x11_plugin_constructor (GType type,
 #include "xpm/robot_south.xpm"
 #include "xpm/robot_west.xpm"
 #include "xpm/robot.xpm"
-  Atom prots[6];
   XClassHint classhint;
   XWMHints wmhints;
   XGCValues values;
-  Atom delete_win;
 
   /* Chain up to the parent first */
   object = parent_class->constructor (type, n_construct_properties,
@@ -167,15 +165,16 @@ x11_plugin_constructor (GType type,
     exit (1);       /* Exit nicely isn't needed yet, and causes segfault */
   }
 
-  delete_win = XInternAtom (x11->dpy, "WM_DELETE_WINDOW", False);
+  x11->wm_delete_win = XInternAtom (x11->dpy, "WM_DELETE_WINDOW", False);
 
   x11->win_width = x11->map_size->num_cols * TILE_SIZE;
   x11->win_height = x11->map_size->num_rows * TILE_SIZE + 32;
   x11->x_win = XCreateSimpleWindow (x11->dpy, DefaultRootWindow (x11->dpy),
           0, 0, x11->win_width, x11->win_height, 0, 0, 0);
 
-  prots[0] = delete_win;
-  XSetWMProtocols (x11->dpy, x11->x_win, prots, 1);
+  XSetWMProtocols (x11->dpy, x11->x_win, &(x11->wm_delete_win), 1);
+
+  x11->wm_protocols = XInternAtom(x11->dpy, "WM_PROTOCOLS", False);
 
   XStoreName (x11->dpy, x11->x_win, "GNU Robots");
 
@@ -641,6 +640,7 @@ inline void x11_plugin_update_status (X11Plugin *x11,
 				   glong shields)
 {
   XEvent ev;
+  XClientMessageEvent* evt;
 
   x11_update_status (x11, s, energy, score, shields);
 
@@ -658,9 +658,14 @@ inline void x11_plugin_update_status (X11Plugin *x11,
             exit (0);
             break;
         }
-      case DestroyNotify:
-      case ClientMessage:   /* Need to do some checks? */
-        exit(0);
+      case ClientMessage:
+        evt = (XClientMessageEvent*)&ev;
+        if (evt->message_type == x11->wm_protocols
+                && evt->data.l[0] == x11->wm_delete_win)
+        {
+          g_printf("Exited\n");
+          exit(0);
+        }
         break;
     }
   }
