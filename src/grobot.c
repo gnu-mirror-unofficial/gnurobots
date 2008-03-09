@@ -27,6 +27,8 @@
 #include <stdlib.h>
 #include "sign.h"
 
+G_DEFINE_TYPE(GRobot, g_robot, G_TYPE_OBJECT)
+
 enum
 {
   DEATH,
@@ -44,56 +46,33 @@ enum
   ARG_SHIELDS,
   ARG_UNITS,
   ARG_SHOTS,
-
   ARG_USER_INTERFACE,
   ARG_MAP
 };
 
-static gchar *things[] =
-  { "space", "food", "prize", "wall", "baddie", "robot" };
+static gchar *things[] = { "space", "food", "prize", "wall", "baddie",
+    "robot" };
 static gint cthings[] = { SPACE, FOOD, PRIZE, WALL, BADDIE, ROBOT };
 
-GType _g_robot_type;
-
 static guint g_robot_signals[LAST_SIGNAL] = { 0 };
-static void g_robot_class_init (GRobotClass * klass);
 
 static void g_robot_dispose (GObject * object);
 static void g_robot_finalize (GObject * object);
 
 static void g_robot_set_property (GObject * object, guint prop_id,
-                  const GValue * value, GParamSpec * pspec);
+    const GValue * value, GParamSpec * pspec);
 
 static void g_robot_get_property (GObject * object, guint prop_id,
-                  GValue * value, GParamSpec * pspec);
+    GValue * value, GParamSpec * pspec);
 
 static GObjectClass *parent_class = NULL;
 
 static gint what_thing (const gchar *th);
 
-GType
-g_robot_get_type (void)
+static void
+g_robot_init (GRobot* robot)
 {
-  if (!_g_robot_type)
-  {
-    static const GTypeInfo object_info = {
-      sizeof (GRobotClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) g_robot_class_init,
-      NULL,
-      NULL,
-      sizeof (GRobot),
-      0,
-      (GInstanceInitFunc) NULL,
-      NULL
-    };
-
-    _g_robot_type =
-      g_type_register_static (G_TYPE_OBJECT, "GRobot", &object_info, 0);
-  }
-
-  return _g_robot_type;
+  /* Nothing yet, need to do priv stuff */
 }
 
 static void
@@ -111,113 +90,116 @@ g_robot_class_init (GRobotClass *klass)
   gobject_class->get_property = g_robot_get_property;
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_POS_X,
-                   g_param_spec_int ("x",
-                             "x",
-                             "X co-ordinate of current Position of the Robot",
-                             G_MININT,
-                             G_MAXINT,
-                             0,
-                             G_PARAM_READWRITE |
-                             G_PARAM_CONSTRUCT));
+                  g_param_spec_int ("x",
+                          "x",
+                          "X co-ordinate of current Position of the Robot",
+                           G_MININT,
+                           G_MAXINT,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_POS_Y,
-                   g_param_spec_int ("y",
-                             "y",
-                             "y co-ordinate of current Position of the Robot",
-                             G_MININT,
-                             G_MAXINT,
-                             0,
-                             G_PARAM_READWRITE |
-                             G_PARAM_CONSTRUCT));
+                  g_param_spec_int ("y",
+                           "y",
+                           "y co-ordinate of current Position of the Robot",
+                           G_MININT,
+                           G_MAXINT,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_DIRECTION,
-                   g_param_spec_int ("direction",
-                             "direction",
-                             "current Direction of the Robot",
-                             G_MININT,
-                             G_MAXINT,
-                             0,
-                             G_PARAM_READWRITE |
-                             G_PARAM_CONSTRUCT));
+                  g_param_spec_int ("direction",
+                           "direction",
+                           "current Direction of the Robot",
+                           G_MININT,
+                           G_MAXINT,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_SCORE,
-                   g_param_spec_long ("score",
-                              "Score",
-                              "current Score of the Robot",
-                              G_MINLONG,
-                              G_MAXLONG,
-                              0,
-                              G_PARAM_READWRITE |
-                              G_PARAM_CONSTRUCT));
+                  g_param_spec_long ("score",
+                           "Score",
+                           "current Score of the Robot",
+                           G_MINLONG,
+                           G_MAXLONG,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_ENERGY,
-                   g_param_spec_long ("energy",
-                              "Energy",
-                              "current Energy-level of the Robot",
-                              G_MINLONG,
-                              G_MAXLONG,
-                              0,
-                              G_PARAM_READWRITE |
-                              G_PARAM_CONSTRUCT));
+                  g_param_spec_long ("energy",
+                           "Energy",
+                           "current Energy-level of the Robot",
+                           G_MINLONG,
+                           G_MAXLONG,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_SHIELDS,
-                   g_param_spec_long ("shields",
-                              "Shields",
-                              "current Shield-level of the Robot",
-                              G_MINLONG,
-                              G_MAXLONG,
-                              0,
-                              G_PARAM_READWRITE |
-                              G_PARAM_CONSTRUCT));
+                  g_param_spec_long ("shields",
+                           "Shields",
+                           "current Shield-level of the Robot",
+                           G_MINLONG,
+                           G_MAXLONG,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_UNITS,
-                   g_param_spec_long ("units",
-                              "Units",
-                              "Units walked by the Robot so far",
-                              G_MINLONG,
-                              G_MAXLONG,
-                              0,
-                              G_PARAM_READWRITE |
-                              G_PARAM_CONSTRUCT));
+                  g_param_spec_long ("units",
+                           "Units",
+                           "Units walked by the Robot so far",
+                           G_MINLONG,
+                           G_MAXLONG,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_SHOTS,
-                   g_param_spec_long ("shots",
-                              "Shots",
-                              "Number of Shots fired by the Robot",
-                              G_MINLONG,
-                              G_MAXLONG,
-                              0,
-                              G_PARAM_READWRITE |
-                              G_PARAM_CONSTRUCT));
+                  g_param_spec_long ("shots",
+                           "Shots",
+                           "Number of Shots fired by the Robot",
+                           G_MINLONG,
+                           G_MAXLONG,
+                           0,
+                           G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT));
 
-  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_USER_INTERFACE,
-                   g_param_spec_object ("user-interface",
-                            "UserInterface",
-                            "Reference to the UI object",
-                            G_TYPE_OBJECT,
-                            G_PARAM_READWRITE |
-                            G_PARAM_CONSTRUCT));
+  g_object_class_install_property (G_OBJECT_CLASS (klass),
+      ARG_USER_INTERFACE,
+                  g_param_spec_object ("user-interface",
+                          "UserInterface",
+                          "Reference to the UI object",
+                          G_TYPE_OBJECT,
+                          G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_MAP,
-                   g_param_spec_object ("map",
-                            "Map",
-                            "Reference to the Game Map object",
-                            G_TYPE_OBJECT,
-                            G_PARAM_READWRITE |
-                            G_PARAM_CONSTRUCT));
+                  g_param_spec_object ("map",
+                          "Map",
+                          "Reference to the Game Map object",
+                          G_TYPE_OBJECT,
+                          G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT));
 
   g_robot_signals[DEATH] =
-    g_signal_new ("death",
-          G_TYPE_FROM_CLASS (klass),
-          G_SIGNAL_RUN_LAST,
-          G_STRUCT_OFFSET (GRobotClass, death),
-          NULL,
-          NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0, NULL);
+                  g_signal_new ("death",
+                          G_TYPE_FROM_CLASS (klass),
+                          G_SIGNAL_RUN_LAST,
+                          G_STRUCT_OFFSET (GRobotClass, death),
+                          NULL,
+                          NULL,
+                          g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0,
+                          NULL);
 }
 
 static void
-g_robot_set_property (GObject *object, guint prop_id,
-              const GValue *value, GParamSpec *pspec)
+g_robot_set_property (GObject *object, guint prop_id, const GValue *value,
+        GParamSpec *pspec)
 {
   GRobot *robot;
   GObject *obj;
@@ -294,8 +276,8 @@ g_robot_set_property (GObject *object, guint prop_id,
 }
 
 static void
-g_robot_get_property (GObject *object, guint prop_id,
-              GValue *value, GParamSpec *pspec)
+g_robot_get_property (GObject *object, guint prop_id, GValue *value,
+        GParamSpec *pspec)
 {
   GRobot *robot;
 
@@ -348,7 +330,7 @@ g_robot_new (gint x, gint y, gint dir, glong score, glong energy,
          Map *map)
 {
 
-  return g_object_new (g_robot_get_type (),
+  return G_ROBOT(g_object_new (g_robot_get_type(),
                "x", x,
                "y", y,
                "direction", dir,
@@ -357,7 +339,7 @@ g_robot_new (gint x, gint y, gint dir, glong score, glong energy,
                "shields", shields,
                "units", units,
                "shots", shots,
-               "user_interface", ui, "map", map, NULL);
+               "user_interface", ui, "map", map, NULL));
 }
 
 static void

@@ -29,13 +29,13 @@
   ARG_MAP
 };*/
 
-GType _user_interface_type = 0;
-
 static void user_interface_base_init (UserInterfaceClass * klass);
 
 GType
 user_interface_get_type (void)
 {
+  static GType _user_interface_type = 0;
+
   if (!_user_interface_type)
   {
     static const GTypeInfo interface_info = {
@@ -125,11 +125,11 @@ user_interface_robot_smell (UserInterface * ui,
 
 void
 user_interface_robot_zap (UserInterface * ui,
-              gint x,
-              gint y,
-              gint cdir,
-              gint x_to,
-              gint y_to, glong energy, glong score, glong shields)
+                gint x,
+                gint y,
+                gint cdir,
+                gint x_to,
+                gint y_to, glong energy, glong score, glong shields)
 {
   USER_INTERFACE_GET_CLASS (ui)->user_interface_robot_zap (ui, x, y, cdir,
                                x_to, y_to, energy,
@@ -138,12 +138,12 @@ user_interface_robot_zap (UserInterface * ui,
 
 void
 user_interface_robot_feel (UserInterface * ui,
-               gint x,
-               gint y,
-               gint cdir,
-               gint x_to,
-               gint y_to,
-               glong energy, glong score, glong shields)
+                 gint x,
+                 gint y,
+                 gint cdir,
+                 gint x_to,
+                 gint y_to,
+                 glong energy, glong score, glong shields)
 {
   USER_INTERFACE_GET_CLASS (ui)->user_interface_robot_feel (ui, x, y, cdir,
                                 x_to, y_to,
@@ -153,12 +153,12 @@ user_interface_robot_feel (UserInterface * ui,
 
 void
 user_interface_robot_grab (UserInterface * ui,
-               gint x,
-               gint y,
-               gint cdir,
-               gint x_to,
-               gint y_to,
-               glong energy, glong score, glong shields)
+                 gint x,
+                 gint y,
+                 gint cdir,
+                 gint x_to,
+                 gint y_to,
+                 glong energy, glong score, glong shields)
 {
   USER_INTERFACE_GET_CLASS (ui)->user_interface_robot_grab (ui, x, y, cdir,
                                 x_to, y_to,
@@ -168,12 +168,12 @@ user_interface_robot_grab (UserInterface * ui,
 
 void
 user_interface_robot_look (UserInterface * ui,
-               gint x,
-               gint y,
-               gint cdir,
-               gint x_to,
-               gint y_to,
-               glong energy, glong score, glong shields)
+                 gint x,
+                 gint y,
+                 gint cdir,
+                 gint x_to,
+                 gint y_to,
+                 glong energy, glong score, glong shields)
 {
   USER_INTERFACE_GET_CLASS (ui)->user_interface_robot_look (ui, x, y, cdir,
                                 x_to, y_to,
@@ -181,21 +181,18 @@ user_interface_robot_look (UserInterface * ui,
                                 shields);
 }
 
-/* user_interfaces to get/display data from/to user */
 void
-user_interface_get_string (UserInterface * ui,
-               gchar * prompt, gchar * buff, gint len)
+user_interface_get_string (UserInterface *ui, gchar *prompt, gchar *buff,
+        gint len)
 {
-  USER_INTERFACE_GET_CLASS (ui)->user_interface_get_string (ui, prompt, buff,
-                                len);
+  USER_INTERFACE_GET_CLASS(ui)->user_interface_get_string(ui, prompt, buff,
+          len);
 }
 
 void
-user_interface_update_status (UserInterface * ui,
-                  const gchar * s,
-                  glong energy, glong score, glong shields)
+user_interface_update_status (UserInterface * ui, const gchar * s,
+        glong energy, glong score, glong shields)
 {
-  USER_INTERFACE_GET_CLASS (ui)->user_interface_update_status (ui, s, energy,
-                                   score,
-                                   shields);
+  USER_INTERFACE_GET_CLASS(ui)->user_interface_update_status(ui, s, energy,
+          score, shields);
 }

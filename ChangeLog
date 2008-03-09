@@ -10,6 +10,10 @@
 		Removed getopt.
 	* various:
 		Correct copyright headers.
+	* include/grobot.h src/grobot.c src/map.c include/map.h:
+		Tidy up, and convert GObject style.
+	* src/userinterface.c include/userinterface.h:
+		Tidy up.
 
 2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
 

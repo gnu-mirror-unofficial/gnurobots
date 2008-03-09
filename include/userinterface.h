@@ -26,7 +26,21 @@
 
 G_BEGIN_DECLS
 
-extern GType _user_interface_type;
+#define G_TYPE_USER_INTERFACE           \
+            user_interface_get_type()
+#define G_IS_USER_INTERFACE(obj)        \
+            G_TYPE_CHECK_INSTANCE_TYPE(obj, G_TYPE_USER_INTERFACE)
+#define G_IS_USER_INTERFACE_CLASS(klass)\
+            G_TYPE_CHECK_CLASS_TYPE(klass, G_TYPE_USER_INTERFACE)
+#define USER_INTERFACE_GET_CLASS(obj)   \
+            G_TYPE_INSTANCE_GET_INTERFACE(obj, G_TYPE_USER_INTERFACE,\
+              UserInterfaceClass)
+#define USER_INTERFACE(obj)             \
+            G_TYPE_CHECK_INSTANCE_CAST(obj, G_TYPE_USER_INTERFACE, \
+              UserInterface)
+#define USER_INTERFACE_CLASS(klass)     \
+            G_TYPE_CHECK_CLASS_CAST(klass, G_TYPE_USER_INTERFACE,\
+              UserInterfaceClass)
 
 typedef struct _UserInterface UserInterface;
 typedef struct _UserInterfaceClass UserInterfaceClass;
@@ -34,174 +48,165 @@ typedef struct _UserInterfaceClass UserInterfaceClass;
 struct _UserInterfaceClass {
   GTypeInterface parent;
 
-  void 	(* user_interface_add_thing)		(UserInterface *ui, 
-					 	 gint x, 
-					 	 gint y, 
-					 	 gint thing);
+  void  (* user_interface_add_thing)      (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint thing);
 
-  void 	(* user_interface_draw)	 		(UserInterface *ui);
+  void  (* user_interface_draw)           (UserInterface *ui);
 
-  void	(* user_interface_update_status)	(UserInterface *ui,
-						 const gchar *s, 
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_update_status)  (UserInterface *ui,
+                         const gchar *s,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-  void 	(* user_interface_move_robot) 		(UserInterface *ui, 
-						 gint from_x, 
-						 gint from_y, 
-						 gint to_x, 
-						 gint to_y, 
-						 gint cdir,
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_move_robot)     (UserInterface *ui,
+                         gint from_x,
+                         gint from_y,
+                         gint to_x,
+                         gint to_y,
+                         gint cdir,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-   void (* user_interface_robot_smell) 		(UserInterface *ui, 
-						 gint x, 
-						 gint y, 
-						 gint cdir,
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_robot_smell)    (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint cdir,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-   void	(* user_interface_robot_zap)		(UserInterface *ui, 
-						 gint x, 
-						 gint y, 
-						 gint cdir, 
-			       			 gint x_to, 
-						 gint y_to,
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_robot_zap)      (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint cdir,
+                         gint x_to,
+                         gint y_to,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-   void (* user_interface_robot_feel) 		(UserInterface *ui, 
-						 gint x, 
-						 gint y, 
-						 gint cdir, 
-						 gint x_to, 
-						 gint y_to,
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_robot_feel)     (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint cdir,
+                         gint x_to,
+                         gint y_to,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-   void (* user_interface_robot_grab) 		(UserInterface *ui,
-				         	 gint x, 
-				         	 gint y, 
-				         	 gint cdir, 
-				         	 gint x_to, 
-				         	 gint y_to,
-				         	 glong energy,
-				         	 glong score, 
-				         	 glong shields);
+  void  (* user_interface_robot_grab)     (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint cdir,
+                         gint x_to,
+                         gint y_to,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-   void (* user_interface_robot_look) 		(UserInterface *ui,
-						 gint x, 
-						 gint y, 
-						 gint cdir, 
-						 gint x_to, 
-						 gint y_to,
-		 				 glong energy, 
-						 glong score, 
-						 glong shields);
+  void  (* user_interface_robot_look)     (UserInterface *ui,
+                         gint x,
+                         gint y,
+                         gint cdir,
+                         gint x_to,
+                         gint y_to,
+                         glong energy,
+                         glong score,
+                         glong shields);
 
-/* routines to get/display data from/to user */
-   void (* user_interface_get_string) 		(UserInterface *ui,
-						 gchar *prompt, 
-						 gchar *buff, 
-						 gint len);
+  void  (* user_interface_get_string)     (UserInterface *ui,
+                         gchar *prompt,
+                         gchar *buff,
+                         gint len);
 };
 
-#define G_TYPE_USER_INTERFACE			(_user_interface_type)
-#define G_IS_USER_INTERFACE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), G_TYPE_USER_INTERFACE))
-#define G_IS_USER_INTERFACE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), G_TYPE_USER_INTERFACE))
-#define USER_INTERFACE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_INTERFACE ((obj), G_TYPE_USER_INTERFACE, UserInterfaceClass))
-#define USER_INTERFACE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), G_TYPE_USER_INTERFACE, UserInterface))
-#define USER_INTERFACE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), G_TYPE_USER_INTERFACE, UserInterfaceClass))
-
 /* normal GObject stuff */
-GType	user_interface_get_type		(void);
+GType   user_interface_get_type     (void);
 
 /* functions we want implemented by the implementers of our interface */
-void 	user_interface_add_thing 	(UserInterface *ui, 
-					 gint x, 
-					 gint y, 
-					 gint thing);
+void    user_interface_add_thing        (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint thing);
 
-void 	user_interface_draw	 	(UserInterface *ui);
+void    user_interface_draw             (UserInterface *ui);
 
-void	user_interface_update_status	(UserInterface *ui,
-					 const gchar *s, 
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_update_status    (UserInterface *ui,
+                     const gchar *s,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_move_robot 	(UserInterface *ui, 
-					 gint from_x, 
-					 gint from_y, 
-					 gint to_x, 
-					 gint to_y, 
-					 gint cdir,
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_move_robot       (UserInterface *ui,
+                     gint from_x,
+                     gint from_y,
+                     gint to_x,
+                     gint to_y,
+                     gint cdir,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_robot_smell 	(UserInterface *ui, 
-					 gint x, 
-					 gint y, 
-					 gint cdir,
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_robot_smell      (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint cdir,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_robot_zap 	(UserInterface *ui, 
-					 gint x, 
-					 gint y, 
-					 gint cdir, 
-			       		 gint x_to, 
-					 gint y_to,
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_robot_zap        (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint cdir,
+                     gint x_to,
+                     gint y_to,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_robot_feel 	(UserInterface *ui, 
-					 gint x, 
-					 gint y, 
-					 gint cdir, 
-					 gint x_to, 
-					 gint y_to,
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_robot_feel       (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint cdir,
+                     gint x_to,
+                     gint y_to,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_robot_grab 	(UserInterface *ui,
-				         gint x, 
-				         gint y, 
-				         gint cdir, 
-				         gint x_to, 
-				         gint y_to,
-				         glong energy,
-				         glong score, 
-				         glong shields);
+void    user_interface_robot_grab       (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint cdir,
+                     gint x_to,
+                     gint y_to,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-void 	user_interface_robot_look 	(UserInterface *ui,
-					 gint x, 
-					 gint y, 
-					 gint cdir, 
-					 gint x_to, 
-					 gint y_to,
-		 			 glong energy, 
-					 glong score, 
-					 glong shields);
+void    user_interface_robot_look       (UserInterface *ui,
+                     gint x,
+                     gint y,
+                     gint cdir,
+                     gint x_to,
+                     gint y_to,
+                     glong energy,
+                     glong score,
+                     glong shields);
 
-/* routines to get/display data from/to user */
-void 	user_interface_get_string 	(UserInterface *ui,
-					 gchar *prompt, 
-					 gchar *buff, 
-					 gint len);
+void    user_interface_get_string       (UserInterface *ui,
+                     gchar *prompt,
+                     gchar *buff,
+                     gint len);
 
-typedef UserInterface * (* UserInterfaceInitFunc) (Map *map, 
-						   GType parent_type);
+typedef UserInterface * (* UserInterfaceInitFunc) (Map *map,
+                           GType parent_type);
 #define USER_INTERFACE_INIT_FUNCTION "user_interface_new"
 
 G_END_DECLS

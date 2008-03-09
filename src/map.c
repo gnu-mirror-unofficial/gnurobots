@@ -27,16 +27,13 @@
 #include "configs.h"
 #include "map.h"
 
+G_DEFINE_TYPE(Map, map, G_TYPE_OBJECT)
+
 enum
 {
   ARG_0,
   ARG_SIZE
 };
-
-GType _map_type = 0;
-
-static void map_class_init (MapClass *klass);
-static void map_init (GObject *object);
 
 static void map_set_property (GObject *object, guint prop_id,
                   const GValue *value, GParamSpec *pspec);
@@ -44,41 +41,12 @@ static void map_set_property (GObject *object, guint prop_id,
 static void map_get_property (GObject *object, guint prop_id,
                   GValue *value, GParamSpec *pspec);
 
-static GObjectClass *parent_class = NULL;
-
-GType
-map_get_type (void)
-{
-  if (!_map_type)
-  {
-    static const GTypeInfo object_info = {
-      sizeof (MapClass),
-      NULL,
-      NULL,
-      (GClassInitFunc) map_class_init,
-      NULL,
-      NULL,
-      sizeof (Map),
-      0,
-      (GInstanceInitFunc) map_init,
-      NULL
-    };
-
-    _map_type =
-      g_type_register_static (G_TYPE_OBJECT, "Map", &object_info, 0);
-  }
-
-  return _map_type;
-}
-
 static void
 map_class_init (MapClass *klass)
 {
   GObjectClass *gobject_class;
 
-  gobject_class = (GObjectClass *) klass;
-
-  parent_class = g_type_class_ref (G_TYPE_OBJECT);
+  gobject_class = G_OBJECT_CLASS(klass);
 
   gobject_class->set_property = map_set_property;
   gobject_class->get_property = map_get_property;
@@ -92,10 +60,8 @@ map_class_init (MapClass *klass)
 }
 
 static void
-map_init (GObject *object)
+map_init (Map *map)
 {
-  Map *map = MAP (object);
-
   map->_map = NULL;
   map->size.num_rows = -1;
   map->size.num_cols = -1;
