@@ -1,4 +1,4 @@
-/* Copyright (C) 2007  Bradley Smith <brad@brad-smith.co.uk>
+/* Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
  * This file is part of GNU Robots.
  *

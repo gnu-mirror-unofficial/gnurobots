@@ -1,3 +1,4 @@
+## Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
 ##
 ## Makefile.am
 ##
@@ -14,10 +15,9 @@
 ## You should have received a copy of the GNU General Public License
 ## along with GNU Robots; if not, write to the Free Software
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-##
 
 AUTOMAKE_OPTIONS     = 1.8.5
-SUBDIRS              = contrib doc getopt include lib maps scheme src
+SUBDIRS              = contrib doc include lib maps scheme src
 EXTRA_DIST           = build
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure
 

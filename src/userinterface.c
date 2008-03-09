@@ -1,9 +1,7 @@
-/* $Id: userinterface.c,v 1.7 2004/10/21 19:24:30 zeenix Exp $ */
-/*
- * GNU Robots game engine.  This is the User Interface module
- *
- * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+/* Copyright (C) 1998 Jim Hall <jhall1@isd.net>
  * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
+ *
+ * GNU Robots game engine.  This is the User Interface module
  *
  * GNU Robots is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

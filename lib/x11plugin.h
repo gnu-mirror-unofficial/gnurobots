@@ -1,15 +1,14 @@
-/* $Id: x11plugin.h,v 1.1 2004/10/21 19:24:30 zeenix Exp $ */
-/* GNU Robots game engine.
- *
- * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+/* Copyright (C) 1998 Jim Hall <jhall1@isd.net>
  * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
- * This program is free software; you can redistribute it and/or modify
+ * GNU Robots game engine.
+ *
+ * GNU Robots is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * GNU Robots is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.

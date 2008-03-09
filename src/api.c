@@ -1,9 +1,7 @@
-/* $Id: api.c,v 1.16 2005/09/06 19:55:40 zeenix Exp $ */
-/*
- * Robot API for the GNU Robots game
- *
- * Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+/* Copyright (C) 1998 Jim Hall <jhall1@isd.net>
  * Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
+ *
+ * Robot API for the GNU Robots game
  *
  * GNU Robots is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

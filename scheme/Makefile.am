@@ -1,3 +1,4 @@
+## Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
 ##
 ## scheme/Makefile.am
 ##
@@ -14,7 +15,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with GNU Robots; if not, write to the Free Software
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-##
 
 schemedir = $(pkgdatadir)/scheme
 

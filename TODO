@@ -7,6 +7,8 @@ _____________________________________________________________________
 THINGS TO DO:
 _____________________________________________________________________
 
+* src/sign.c needs to go.
+
 * Improve the graphics, to make everything look better.  I think I
   need a graphic designer to help me do this.  GTK+ would be nice.
 
