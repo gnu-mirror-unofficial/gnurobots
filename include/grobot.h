@@ -67,6 +67,7 @@ struct _GRobotClass {
 /* some convenient macros */
 #define G_ROBOT_POSITION_X(robot)   ((robot)->x)
 #define G_ROBOT_POSITION_Y(robot)   ((robot)->y)
+#define sign(x)                     (x/abs(x))
 
 /* normal GObject stuff */
 GType g_robot_get_type(void) G_GNUC_CONST;

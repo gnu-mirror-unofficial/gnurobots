@@ -25,5 +25,5 @@ INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
 	   -DMAPS_PATH=\"$(mapsdir)\" \
 	   -DSCRIPTS_PATH=\"$(schemedir)\"
 
-gnurobots_SOURCES = main.c api.c sign.c map.c grobot.c userinterface.c
+gnurobots_SOURCES = main.c api.c map.c grobot.c userinterface.c
 gnurobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) -lltdl

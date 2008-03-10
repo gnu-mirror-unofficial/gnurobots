@@ -22,6 +22,5 @@ EXTRA_DIST =\
  map.h\
  main.h\
  grobot.h\
- sign.h\
  userinterface.h
 

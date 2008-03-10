@@ -15,7 +15,8 @@
 		Tidy up, and convert GObject style.
 	* src/userinterface.c include/userinterface.h:
 		Tidy up.
-	* lib/x11plugin.c: 
+	* src/sign.c include/sign.h src/api.c src/grobot.c:
+		Remove sign hack.
 
 2008-03-08  Bradley Smith <brad@brad-smith.co.uk>
 

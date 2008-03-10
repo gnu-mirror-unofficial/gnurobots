@@ -26,7 +26,6 @@
 
 #include "api.h"                /* GNU Robots API */
 #include "main.h"               /* for exit_nicely */
-#include "sign.h"               /* a hack for +/- sign */
 #include "grobot.h"
 
 extern GRobot *robot;

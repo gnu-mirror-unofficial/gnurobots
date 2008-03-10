@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <string.h>
 #include <stdlib.h>
-#include "sign.h"
 
 G_DEFINE_TYPE(GRobot, g_robot, G_TYPE_OBJECT)
 
@@ -374,7 +373,7 @@ g_robot_turn (GRobot *robot, gint num_turns)
 
   /* turn left or right? */
 
-  incr = sign (num_turns);
+  incr = sign(num_turns);
 
   for (i = 0; i < abs (num_turns); i++)
   {
