@@ -53,6 +53,7 @@ struct _UserInterfaceClass {
                          gint y,
                          gint thing);
 
+  void  (* user_interface_run)            (UserInterface *ui);
   void  (* user_interface_draw)           (UserInterface *ui);
 
   void  (* user_interface_update_status)  (UserInterface *ui,
@@ -134,6 +135,7 @@ void    user_interface_add_thing        (UserInterface *ui,
                      gint y,
                      gint thing);
 
+void    user_interface_run              (UserInterface *ui);
 void    user_interface_draw             (UserInterface *ui);
 
 void    user_interface_update_status    (UserInterface *ui,

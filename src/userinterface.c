@@ -88,6 +88,11 @@ user_interface_add_thing (UserInterface * ui, gint x, gint y, gint thing)
   USER_INTERFACE_GET_CLASS (ui)->user_interface_add_thing (ui, x, y, thing);
 }
 
+void user_interface_run(UserInterface* ui)
+{
+  USER_INTERFACE_GET_CLASS(ui)->user_interface_run(ui);
+}
+
 void
 user_interface_draw (UserInterface * ui)
 {

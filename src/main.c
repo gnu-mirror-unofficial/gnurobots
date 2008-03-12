@@ -59,6 +59,7 @@ Map *map;
 GModule *plugin;
 
 UserInterface *load_ui_module (gchar *module_name, Map *map);
+gpointer callback(gpointer data);
 SCM catch_handler (void *data, SCM tag, SCM throw_args);
 gint is_file_readable (const gchar *filename);
 
@@ -331,6 +332,7 @@ main_prog (void *closure, gint argc, gchar *argv[])
 
   /* draw the map */
   user_interface_draw (ui);
+  user_interface_update_status (ui, "", -1, -1, -1);
 
   if (strlen (robot_program) != 0)
   {
@@ -342,21 +344,31 @@ main_prog (void *closure, gint argc, gchar *argv[])
   else
   {
     gchar buff[BUFF_LEN];
-    SCM value;
 
-    g_printf ("Robot program not specified. Entering interactive mode..\n");
-    user_interface_update_status (ui, "", -1, -1, -1);
-    while (1)
+    g_thread_init(NULL);
+
+    g_printf("Robot program not specified. Entering interactive mode..\n");
+
+    g_thread_create(callback, NULL, FALSE, NULL);
+
+    while(1)
     {
       user_interface_get_string (ui, "guile> ", buff, BUFF_LEN);
-      value = scm_internal_catch (SCM_BOOL_T,
-                  (scm_t_catch_body) scm_c_eval_string,
-                  (void *) buff, catch_handler, NULL);
+
+      scm_internal_catch (SCM_BOOL_T, (scm_t_catch_body) scm_c_eval_string,
+            (void *) buff, catch_handler, NULL);
     }
   }
 
   /* done */
   exit_nicely ();
+}
+
+gpointer callback(gpointer data)
+{
+  user_interface_run(ui);
+
+  return NULL;
 }
 
 /************************************************************************

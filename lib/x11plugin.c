@@ -118,6 +118,8 @@ x11_plugin_constructor (GType type,
 
   x11 = X11_PLUGIN (object);
 
+  XInitThreads();
+
   if ((x11->dpy = XOpenDisplay ("")) == NULL) {
     g_printf ("Couldn't open the X Server Display!\n");
     exit (1);       /* Exit nicely isn't needed yet, and causes segfault */
@@ -147,7 +149,7 @@ x11_plugin_constructor (GType type,
   XSetWMHints (x11->dpy, x11->x_win, &wmhints);
 
   XSelectInput (x11->dpy, x11->x_win,
-      KeyPressMask | KeyReleaseMask | StructureNotifyMask
+      ExposureMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask
       | FocusChangeMask);
 
   XMapWindow (x11->dpy, x11->x_win);
@@ -597,12 +599,15 @@ inline void x11_plugin_update_status (X11Plugin *x11,
 				   glong score,
 				   glong shields)
 {
+  x11_update_status (x11, s, energy, score, shields);
+}
+
+inline void x11_plugin_run(X11Plugin* x11)
+{
   XEvent ev;
   XClientMessageEvent* evt;
 
-  x11_update_status (x11, s, energy, score, shields);
-
-  while (XPending (x11->dpy))
+  while (TRUE)
   {
     XNextEvent (x11->dpy, &ev);
 
@@ -624,6 +629,9 @@ inline void x11_plugin_update_status (X11Plugin *x11,
           g_printf("Exited\n");
           exit(0);
         }
+        break;
+      case Expose:
+        x11_plugin_draw(x11);
         break;
     }
   }
@@ -752,6 +760,7 @@ static void x11_plugin_interface_init (gpointer g_iface, gpointer iface_data)
 				               gint thing))
 	  			    x11_plugin_add_thing;
 
+  klass->user_interface_run = (void(*)(UserInterface *ui)) x11_plugin_run;
   klass->user_interface_draw = (void (*) (UserInterface *ui)) x11_plugin_draw;
   klass->user_interface_update_status = (void (*) (UserInterface *ui,
 				  	 	   const gchar *s,
