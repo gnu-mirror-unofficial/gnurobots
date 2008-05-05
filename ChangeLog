@@ -1,3 +1,9 @@
+2008-05-05  Bradley Smith <brad@brad-smith.co.uk>
+
+	* lib/* include/userinterface.h src/userinterface src/main.c
+	  configure.ac src/Makefile.am:
+		Scrap plug-able interfaces in preparation for GTK GUI.
+
 2008-03-09  Bradley Smith <brad@brad-smith.co.uk>
 
 	* src/api.c:

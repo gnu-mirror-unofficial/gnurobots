@@ -25,12 +25,10 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
-#include <gmodule.h>
 
 #include <libguile.h>
 
 #include <getopt.h>     /* for GNU getopt_long */
-#include <ltdl.h>       /* For loading our ui plugins */
 
 #include "grobot.h"     /* the robot structure, and robot manipulation
                            routines */
@@ -43,22 +41,13 @@
 #include "main.h"       /* for this source file */
 
 #define BUFF_LEN 1024
-#define MODULE_PREFIX "grobots-"
-#define MODULE_PATH_MAX 256
-#define MODULE_NAME_MAX 256
-
-/* Plugins we should know about STATICALLY */
-#define X11_MODULE "x11"
-#define CURSES_MODULE "curses"
 
 /* Globals (share with api.c) */
 GList *robots = NULL;
 GRobot *robot = NULL;       /* The current robot */
 UserInterface *ui;
 Map *map;
-GModule *plugin;
 
-UserInterface *load_ui_module (gchar *module_name, Map *map);
 gpointer callback(gpointer data);
 SCM catch_handler (void *data, SCM tag, SCM throw_args);
 gint is_file_readable (const gchar *filename);
@@ -89,7 +78,6 @@ main (gint argc, gchar *argv[])
     {"map-file", 1, NULL, 'f'},
     {"shields", 1, NULL, 's'},
     {"energy", 1, NULL, 'e'},
-    {"plugin", 1, NULL, 'p'},
     {NULL, 0, NULL, 0}
   };
 
@@ -152,11 +140,6 @@ main (gint argc, gchar *argv[])
     case 'e':
       /* Set energy */
       robot->energy = (glong) atol (optarg);
-      break;
-
-    case 'p':
-      /* Set plugin */
-      main_argv[3] = optarg;    /* pointer assignment */
       break;
 
     default:
@@ -299,7 +282,6 @@ main_prog (void *closure, gint argc, gchar *argv[])
 {
   gchar *map_file = argv[1];
   gchar *robot_program = argv[2];
-  gchar *module = argv[3];
 
   api_init ();
 
@@ -317,7 +299,7 @@ main_prog (void *closure, gint argc, gchar *argv[])
           G_ROBOT_POSITION_Y (robot),
           G_ROBOT_POSITION_X (robot), ROBOT);
 
-  ui = load_ui_module (module, map);
+  ui = user_interface_new (map);
 
   if (ui == NULL)
   {
@@ -332,7 +314,10 @@ main_prog (void *closure, gint argc, gchar *argv[])
 
   /* draw the map */
   user_interface_draw (ui);
-  user_interface_update_status (ui, "", -1, -1, -1);
+  user_interface_update_status (ui, "Welcome to GNU Robots", -1,-1, -1);
+
+  g_thread_init(NULL);
+  g_thread_create(callback, NULL, FALSE, NULL);
 
   if (strlen (robot_program) != 0)
   {
@@ -345,11 +330,7 @@ main_prog (void *closure, gint argc, gchar *argv[])
   {
     gchar buff[BUFF_LEN];
 
-    g_thread_init(NULL);
-
     g_printf("Robot program not specified. Entering interactive mode..\n");
-
-    g_thread_create(callback, NULL, FALSE, NULL);
 
     while(1)
     {
@@ -411,82 +392,6 @@ death (GRobot *robot)
   exit_nicely ();
 }
 
-UserInterface *
-load_ui_module (gchar *module_name, Map *map)
-{
-  UserInterface *ui = NULL;
-  UserInterfaceInitFunc user_interface_new = NULL;
-  gchar module_full_name[MODULE_NAME_MAX];
-  gchar module_path[MODULE_PATH_MAX];
-  gchar *module_full_path;
-  const char *path = getenv (MODULE_PATH_ENV);
-
-  if (!g_module_supported ())
-  {
-    g_printf ("load_ui_module: %s\n", g_module_error ());
-    return NULL;
-  }
-
-  if (path != NULL)
-  {
-    g_strlcpy (module_path, path, MODULE_PATH_MAX);
-  }
-
-  else
-  {
-    g_strlcpy (module_path, MODULE_PATH, MODULE_PATH_MAX);
-  }
-
-  /* Load the module. */
-  g_strlcpy (module_full_name, MODULE_PREFIX, MODULE_NAME_MAX);
-
-  if (module_name != NULL)
-  {
-    g_strlcat (module_full_name, module_name, MODULE_NAME_MAX);
-  }
-
-  else
-  {
-    if (getenv ("DISPLAY") != NULL)
-    {
-      /* Yuppi! we have x */
-      g_strlcat (module_full_name, X11_MODULE, MODULE_NAME_MAX);
-    }
-
-    else
-    {
-      g_strlcat (module_full_name, CURSES_MODULE, MODULE_NAME_MAX);
-    }
-  }
-
-  module_full_path = g_module_build_path (module_path, module_full_name);
-  plugin = g_module_open (module_full_path, 0);
-  g_free (module_full_path);
-
-  /* Find our handles. */
-  if (plugin)
-  {
-    if (!(g_module_symbol (plugin, USER_INTERFACE_INIT_FUNCTION,
-               (gpointer) & user_interface_new)))
-    {
-      g_printf ("load_ui_module: %s\n", g_module_error ());
-      g_module_close (plugin);
-      plugin = NULL;
-    }
-    else
-    {
-      ui = user_interface_new (map, user_interface_get_type ());
-    }
-  }
-  else
-  {
-    g_printf ("error loading module '%s': %s\n", module_name,
-          g_module_error ());
-  }
-
-  return ui;
-}
-
 /************************************************************************
  * void exit_nicely()                                                   *
  *                                                                      *
@@ -518,12 +423,6 @@ exit_nicely ()
 
   g_list_foreach (robots, (GFunc)g_object_unref, NULL);
   g_list_free (robots);
-
-  /* unload the plugin */
-  if (plugin != NULL)
-  {
-    g_module_close (plugin);
-  }
 
   g_printf ("\n-----------------------STATISTICS-----------------------\n");
   g_printf ("Shields: %ld\n", (shields < 0 ? 0 : shields));
@@ -567,7 +466,6 @@ usage (const gchar *argv0)
   g_printf ("Usage: %s [OPTION]... [FILE]\n\n", argv0);
   g_printf
     ("  -f, --map-file=FILE    Load map file (this option is required)\n");
-  g_printf ("  -p, --plugin=PLUGIN    Use plugin PLUGIN\n");
   g_printf ("  -s, --shields=N        Set initial shields to N\n");
   g_printf ("  -e, --energy=N         Set initial energy to N\n");
   g_printf ("  -V, --version          Output version information and exit\n");

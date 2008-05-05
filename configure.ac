@@ -169,8 +169,7 @@ AC_CONFIG_FILES([Makefile
  contrib/Makefile
  doc/Makefile
  include/Makefile
- lib/Makefile
- lib/xpm/Makefile
+ xpm/Makefile
  maps/Makefile
  scheme/Makefile
  src/Makefile

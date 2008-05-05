@@ -18,7 +18,8 @@
 
 bin_PROGRAMS = gnurobots
 
-INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
+INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) $(READLINE_CFLAGS) $(X_FLAGS) \
+		-I$(top_builddir)/include \
 	   -DPKGLIBDIR=\"$(pkglibdir)\" \
 	   -DABS_TOP_BUILDDIR=\"$(abs_top_builddir)\" \
 	   -DPKGDATADIR=\"$(pkgdatadir)\" \
@@ -26,4 +27,5 @@ INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) -I$(top_builddir)/include \
 	   -DSCRIPTS_PATH=\"$(schemedir)\"
 
 gnurobots_SOURCES = main.c api.c map.c grobot.c userinterface.c
-gnurobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) -lltdl -lgthread-2.0
+gnurobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) $(READLINE_LIBS) \
+		$(X_LIBS) -lltdl -lgthread-2.0

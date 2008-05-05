@@ -17,7 +17,7 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 AUTOMAKE_OPTIONS     = 1.8.5
-SUBDIRS              = contrib doc include lib maps scheme src
+SUBDIRS              = contrib doc include maps scheme src xpm
 EXTRA_DIST           = build
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure
 
