@@ -24,12 +24,7 @@ Installing GNU Robots
     To specify an unusual location for GNU Guile, you can use the
     `--with-guile=' option, like this:
 
-    ./configure --with-guile=/home/jhall
-
-    To specify an unusual location for curses, you can use the
-    `--with-curses=' option, like this:
-
-    ./configure --with-curses=/hub/local
+    ./configure --with-guile=/home/user
 
 (2) Look at the generated `Makefile', and check that everything is
     okay.  Then type:
@@ -51,36 +46,12 @@ Notes
 * generator; it would write a Scheme program that you could then load
 * into GNU Robots.  Writing this in GTK+ would seem like a good idea.
 *
-* If anyone would like to help write this programming interface for
-* GNU Robots, please contact me!  You may reach me at <jhall1@isd.net>
+* This will hopefully be in the next release!
 
 
-There are three ways to run GNU Robots:
-
-1. X Windows ("xrobots")
-2. text mode, using curses ("robots")
-3. text mode, log file output ("robots_logfile")
-
-I use the robots_logfile when I am hosting a GNU Robots competition,
-because it is not really interesting for me to see how the many robots
-are individually interacting with their environments. I am only
-interested in the outcome.
-
-I use the xrobots program when I am running my own GNU Robot game,
-because there I *am* interested in what my robot is doing.
+To run GNU Robots, run "gnurobots"
 
 --
-
-The "robots" program is a curses-based version of the game, using an
-ASCII approximation of the game elements.  Your robot will appear as a
-"v" when it points South, "^" when it points North, and "<" and ">"
-for West and East.  Empty spaces are shown as " ", walls as "#",
-baddies as "@", and food and prizes as "+" and "$".
-
-You'll note that this is the same notation used in the GNU Robots map
-files.  The initial location of the robot is not shown in the map
-file, but is always at 1,1 facing East (the upper-left corner is
-always 0,0).
 
 The sample map that is provided as "maps/small.map" is just a single
 room, with prizes all along the four walls.  The sample robot program
@@ -88,19 +59,18 @@ room, with prizes all along the four walls.  The sample robot program
 quit.  Other map files can be found in the maps/ directory, and other
 robot programs are in the scheme/ directory.
 
-The usage for robots, xrobots, robots_logfile is as follows:
+The usage for gnurobots is as follows:
 
-  robots [OPTION]... [FILE]
+  gnurobots [OPTION]... [FILE]
 
 Options are:
 
-  -f, --map-file=FILE    Load map file
-  -s, --shields=N        Set initial shields to N
-  -e, --energy=N         Set initial energy to N
-  -V, --version          Output version information and exit
-  -h, --help             Display this help and exit
+    -f, --map-file=FILE    Load map file
+    -s, --shields=N        Set initial shields to N
+    -e, --energy=N         Set initial energy to N
+    -V, --version          Output version information and exit
+    -h, --help             Display this help and exit
 
-Even though it's not shown, the `-f' option to load a map file is
-required by GNU Robots.  Otherwise, the game will not be able to open
-a map for your robot to explore!
+    Note: FILE refers to a scheme file and ./bin/gnurobots enters into
+          interactive mode if it is not specified.
 

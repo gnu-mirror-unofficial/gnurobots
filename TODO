@@ -7,14 +7,14 @@ _____________________________________________________________________
 THINGS TO DO:
 _____________________________________________________________________
 
-* src/sign.c needs to go.
+* Add GTK GUI.
 
-* Improve the graphics, to make everything look better.  I think I
-  need a graphic designer to help me do this.  GTK+ would be nice.
+* Add graphical map designer.
 
-* In version 2.0, more creatures will get added.  The things called
+* Better graphics?
+
+* In version 2.0, more creatures will get added. The things called
   "baddie" and "food" and "prize" will be generic descriptors.  For
   example, "food" will be a generic name for "cookie" or "donut", so
   that (robot-feel 'cookie) will fail if the thing is a donut, but
   (robot-feel 'food) will still work.
-

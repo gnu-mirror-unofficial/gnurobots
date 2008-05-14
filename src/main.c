@@ -450,8 +450,7 @@ exit_nicely ()
  * void usage(const gchar *argv0)                                       *
  *                                                                      *
  * A function that prints the usage of GNU Robots to the user. Assume   *
- * text mode for this function. We have not initialized X Windows or    *
- * curses yet.                                                          *
+ * text mode for this function. We have not initialized X Windows yet.  *
  ************************************************************************/
 void
 usage (const gchar *argv0)
@@ -465,14 +464,14 @@ usage (const gchar *argv0)
 
   g_printf ("Usage: %s [OPTION]... [FILE]\n\n", argv0);
   g_printf
-    ("  -f, --map-file=FILE    Load map file (this option is required)\n");
+    ("  -f, --map-file=FILE    Load map file\n");
   g_printf ("  -s, --shields=N        Set initial shields to N\n");
   g_printf ("  -e, --energy=N         Set initial energy to N\n");
   g_printf ("  -V, --version          Output version information and exit\n");
   g_printf ("  -h, --help             Display this help and exit\n");
   g_printf ("\nNote: FILE refers to a scheme file and %s enters into \n",
         argv0);
-  g_printf ("      an interactive mode if it is not specified.\n");
+  g_printf ("      interactive mode if it is not specified.\n");
 
   g_printf ("\nReport bugs to <%s>.\n", PACKAGE_BUGREPORT);
 }

@@ -1,6 +1,12 @@
 RELEASE HISTORY FOR GNU ROBOTS:
 _____________________________________________________________________
 
+1.1.0 Bug fix release.
+
+      Imporve GUI, including proper handling of X events.
+      Scrap plugable UI's in preperation for GTK GUI.
+      General clean up.
+
 1.0D  Added some extra documentation (but not much) and the early
       beginning of code clean-up.
 

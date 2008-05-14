@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([GNU Robots], [1.0.90], [brad@brad-smith.co.uk], [gnurobots])
+AC_INIT([GNU Robots], [1.1.0], [brad@brad-smith.co.uk], [gnurobots])
 AC_PREREQ([2.59])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([build])
@@ -65,39 +65,6 @@ fi
 
 AM_CONDITIONAL(USE_X11, test "$use_x11" = "yes")
 
-dnl Check for curses, add to CURSES_LIBS, and CURSES_CFLAGS.
-dnl At this time, only ncurses is supported.
-dnl We should check for SYSV curses too.
-AC_CHECK_HEADERS(ncurses.h,
-   use_curses="yes",
-   AC_MSG_WARN("Can't find ncurses. Curses plugin shall not be compiled.")
-   use_curses="no")
-
-dnl we dont need other checks if the headers are not found
-if test "$use_curses" = "yes"
-then
-
-dnl allow user to specify directory where to find ncurses
-if test -n "$with_ncurses"
-then
-  ncurses_cflags="-I$with_ncurses/include"
-  ncurses_libs="-L$with_ncurses/lib"
-fi
-
-AC_CHECK_LIB(ncurses, initscr,
-  CURSES_LIBS="$ncurses_libs -lncurses"
-  CURSES_CFLAGS="$ncurses_cflags"
-  use_curses="yes",
-  AC_MSG_WARN("Can't find ncurses. Curses plugin shall not be compiled.")
-  use_curses="no")
-
-AC_SUBST(CURSES_LIBS)
-AC_SUBST(CURSES_CFLAGS)
-
-fi
-
-AM_CONDITIONAL(USE_CURSES, test "$use_curses" = "yes")
-
 dnl Check for math library
 AC_CHECK_LIB(m, pow)
 
@@ -122,18 +89,10 @@ if test "x$HAVE_GLIB2" = "xno"; then
   AC_MSG_ERROR([GNU Robots requires GLib2 to compile.])
 fi
 
-AC_CHECK_FUNC(tgetent,
-	[READLINE_EXTRA=],
-	[AC_CHECK_LIB(curses, tgetent,
-		[READLINE_EXTRA=-lcurses],
-		[AC_CHECK_LIB(ncurses, tgetent,
-			[READLINE_EXTRA=-lncurses],
-			[AC_CHECK_LIB(termcap, tgetent,
-				[READLINE_EXTRA=-ltermcap],
-				[AC_MSG_WARN(No Termcap or Curses library found)])
-			])
-		])
-	])
+for termlib in ncurses curses termcap terminfo termlib ; do
+	AC_CHECK_LIB(${termlib}, tgoto,
+		[READLINE_EXTRA="-l${termlib}"; break])
+done
 
 AC_CHECK_LIB(readline,readline,[READLINE_LIBS=-lreadline],
 	AC_MSG_ERROR([
