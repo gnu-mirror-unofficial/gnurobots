@@ -79,6 +79,10 @@ PKG_CHECK_MODULES(GLIB2,glib-2.0 >= 2.4 gobject-2.0 gmodule-2.0,HAVE_GLIB2=yes,H
 AC_SUBST(GLIB2_LIBS)
 AC_SUBST(GLIB2_CFLAGS)
 
+PKG_CHECK_MODULES(GTK,gtk+-2.0 >= 2.4, HAVE_GTK=yes,HAVE_GTK=no)
+AC_SUBST(GTK_LIBS)
+AC_SUBST(GTK_CFLAGS)
+
 schemedir="\$(pkgdatadir)/scheme"
 AC_SUBST(schemedir)
 
@@ -132,6 +136,7 @@ AC_CONFIG_FILES([Makefile
  maps/Makefile
  scheme/Makefile
  src/Makefile
+ ui/Makefile
  ])
 AC_OUTPUT
 

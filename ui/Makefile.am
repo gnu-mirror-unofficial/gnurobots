@@ -1,6 +1,6 @@
 ## Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
 ##
-## Makefile.am
+## src/Makefile.am
 ##
 ## GNU Robots is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -16,8 +16,10 @@
 ## along with GNU Robots; if not, write to the Free Software
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-AUTOMAKE_OPTIONS     = 1.8.5
-SUBDIRS              = contrib doc include maps scheme src xpm ui
-EXTRA_DIST           = build
-MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure
+bin_PROGRAMS = uitest
 
+INCLUDES = $(GTK_CFLAGS) \
+		-I$(top_builddir)/ui/include
+
+uitest_SOURCES = main.c
+uitest_LDFLAGS = $(GTK_LIBS)
