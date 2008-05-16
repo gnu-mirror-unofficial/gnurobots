@@ -2,6 +2,8 @@
 
 	* configure.ac Makefile.am ui/*:
 		Add temporary uitest build.
+	* ui/ui-window.c ui/ui-window.h ui/ui-window-private.h:
+		Add initial empty window structure.
 
 2008-05-14  Bradley Smith <brad@brad-smith.co.uk>
 

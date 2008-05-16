@@ -16,5 +16,6 @@ config.status
 configure
 libtool
 src/gnurobots
+ui/uitest
 stamp-h1
 *~
