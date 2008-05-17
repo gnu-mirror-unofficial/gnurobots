@@ -4,9 +4,9 @@
  * GNU Robots game engine. This is the main() program, using GNU
  * Guile as the backend to handle the language.
  *
- * GNU Robots is free software; you can redistribute it and/or modify
+ * GNU Robots is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * GNU Robots is distributed in the hope that it will be useful,
@@ -15,8 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GNU Robots; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdio.h>
@@ -102,22 +101,22 @@ main (gint argc, gchar *argv[])
     {
     case 'V':
       /* Display version, then quit */
-      g_printf ("\n%s\n", PKGINFO);
-      g_printf ("%s\n", COPYRIGHT);
+      g_printf ("%s\n\n", PKGINFO);
+      g_printf ("%s\n\n", COPYRIGHT);
       g_printf
-    ("\nGNU Robots is free software; you can redistribute it and/or modify\n"
-     "it under the terms of the GNU General Public License as published by\n"
-     "the Free Software Foundation; either version 2 of the License, or\n"
-     "(at your option) any later version.\n");
+  ("GNU Robots is free software: you can redistribute it and/or modify\n"
+   "it under the terms of the GNU General Public License as published by\n"
+   "the Free Software Foundation, either version 3 of the License, or\n"
+   "(at your option) any later version.\n");
       g_printf
-    ("\nGNU Robots is distributed in the hope that it will be useful,\n"
-     "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-     "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-     "GNU General Public License for more details.\n");
+  ("\nGNU Robots is distributed in the hope that it will be useful,\n"
+   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+   "GNU General Public License for more details.\n");
       g_printf
-    ("\nYou should have received a copy of the GNU General Public License\n"
-     "along with GNU Robots; if not, write to the Free Software\n"
-     "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n\n");
+  ("\nYou should have received a copy of the GNU General Public License\n"
+   "along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.\n");
+
       exit (0);
       break;
 
