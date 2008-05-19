@@ -42,28 +42,6 @@ dnl It will ``export'' X_CFLAGS, X_PRE_LIBS, X_EXTRA_LIBS and X_LIBS,
 dnl but for some reason we need to add -lX11 ourselves.
 AC_PATH_XTRA
 
-if test "$have_x" = yes; then
-  x_libs="-lX11"
-  use_x11="yes"
-
-dnl Checks for more X11 libraries, these go to X_LIBS.
-AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
-  x_libs="-lXpm $x_libs"
-  use_x11="yes",
-  AC_MSG_WARN("can't find libXpm, X11 plugin shall not be compiled")
-  use_x11="no",
-  $X_LIBS $x_libs $X_PRE_LIBS $X_EXTRA_LIBS)
-
-dnl finished with X, so we update X_LIBS.
-X_LIBS="$X_LIBS $x_libs"
-
-else
-  AC_MSG_WARN("can't find X windows, X11 plugin shall not be compiled")
-  use_x11="no",
-fi
-
-AM_CONDITIONAL(USE_X11, test "$use_x11" = "yes")
-
 dnl Check for math library
 AC_CHECK_LIB(m, pow)
 
@@ -72,6 +50,10 @@ GUILE_FLAGS
 
 dnl Some sytems need -ldl for dynamic library support.
 dnl AC_CHECK_LIB(dl, dlopen)
+
+PKG_CHECK_MODULES(X,x11 xpm, HAVE_X=yes,HAVE_X=no)
+AC_SUBST(X_LIBS)
+AC_SUBST(X_CFLAGS)
 
 dnl Check for glib2
 PKG_CHECK_MODULES(GLIB2,glib-2.0 >= 2.4 gobject-2.0 gmodule-2.0,HAVE_GLIB2=yes,HAVE_GLIB2=no)
