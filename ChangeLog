@@ -1,3 +1,8 @@
+2008-05-20  Bradley Smith <brad@brad-smith.co.uk>
+
+	* src/userinterface.c:
+	    Change font to fixed
+
 2008-05-19  Bradley Smith <brad@brad-smith.co.uk>
 
 	* configure.ac:

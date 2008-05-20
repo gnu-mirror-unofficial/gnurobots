@@ -152,7 +152,7 @@ user_interface_constructor (GType type,
   XMapWindow (ui->dpy, ui->x_win);
 
   ui->text = XLoadFont (ui->dpy,
-          "-*-helvetica-medium-r-*-*-*-120-*-*-*-*-*-*");
+          "-*-fixed-medium-r-*-*-*-120-*-*-*-*-*-*");
   values.font = ui->text;
   values.foreground = WhitePixel (ui->dpy, DefaultScreen (ui->dpy));
 
