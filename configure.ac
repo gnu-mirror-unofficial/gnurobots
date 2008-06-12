@@ -106,7 +106,7 @@ AC_CHECK_HEADERS(getopt.h)
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-CFLAGS="-pedantic-errors -Werror -Wall -Wfatal-errors -g"
+CFLAGS="-pedantic-errors -Werror -Wall -g"
 
 dnl Done.
 AC_CONFIG_FILES([Makefile
