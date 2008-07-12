@@ -128,11 +128,8 @@ automake -a -c || {
 cd $BUILDDIR
 
 # now remove the cache, because it can be considered dangerous in this case
-echo "+ removing config.cache ... "
-rm -f config.cache
-
-echo
-echo "Now type './configure && make' to compile."
+echo "+ Tidying up"
+rm -rf config.cache config.h.in~ autom4te.cache
 
 exit 0
 
