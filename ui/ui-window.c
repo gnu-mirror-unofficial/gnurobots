@@ -19,6 +19,9 @@
 #include "ui-window.h"
 #include "ui-window-private.h"
 
+#include "ui-cmdwin.h"
+#include "ui-arena.h"
+
 #include <gtk/gtkmain.h>
 
 #define UI_WINDOW_GET_PRIVATE(obj) \
@@ -30,25 +33,48 @@ static void on_ui_window_destroy(GtkWidget *widget, gpointer data);
 
 GtkWidget *ui_window_new(void)
 {
-  return GTK_WIDGET(g_object_new(UI_TYPE_WINDOW, NULL));
+	return GTK_WIDGET(g_object_new(UI_TYPE_WINDOW, NULL));
 }
 
 static void on_ui_window_destroy(GtkWidget *widget, gpointer data)
 {
-  gtk_widget_hide(widget);
-  gtk_main_quit();
+	gtk_widget_hide(widget);
+	gtk_main_quit();
 }
 
-static void ui_window_init(UIWindow* window)
+static void ui_window_init(UIWindow *window)
 {
-  g_signal_connect(G_OBJECT(window), "destroy",
-          G_CALLBACK(on_ui_window_destroy), NULL);
+	GtkWidget *vbox;
+	GtkWidget *vpaned;
 
-  gtk_window_set_title(GTK_WINDOW(window), "UI Test");
-  gtk_widget_show(GTK_WIDGET(window));
+	window->priv = UI_WINDOW_GET_PRIVATE(window);
+
+	vbox = gtk_vbox_new(FALSE, 0);
+	vpaned = gtk_vpaned_new();
+	window->priv->cmdwin = ui_cmdwin_new();
+	window->priv->arena = ui_arena_new();
+
+	gtk_paned_add1(GTK_PANED(vpaned), window->priv->arena);
+	gtk_paned_add2(GTK_PANED(vpaned), window->priv->cmdwin);
+
+	/* TODO: Add menu first etc */
+	gtk_box_pack_start(GTK_BOX(vbox), vpaned, TRUE, TRUE, 0);
+
+	gtk_container_add(GTK_CONTAINER(window), vbox);
+
+	g_signal_connect(G_OBJECT(window), "destroy",
+		G_CALLBACK(on_ui_window_destroy), NULL);
+
+	gtk_window_set_title(GTK_WINDOW(window), "UI Test");
+	gtk_widget_show(window->priv->cmdwin);
+	gtk_widget_show(window->priv->arena);
+	gtk_widget_show(vpaned);
+	gtk_widget_show(vbox);
+	gtk_widget_show(GTK_WIDGET(window));
 }
 
-static void ui_window_class_init(UIWindowClass* klass)
+static void ui_window_class_init(UIWindowClass *klass)
 {
-  g_type_class_add_private(G_OBJECT_CLASS(klass), sizeof(UIWindowPrivate));
+	g_type_class_add_private(G_OBJECT_CLASS(klass),
+		sizeof(UIWindowPrivate));
 }

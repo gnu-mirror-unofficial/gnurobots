@@ -1,6 +1,6 @@
 /* Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
- * GNU Robots UI Test, ui-window-private.h.
+ * GNU Robots, ui-arena.c
  *
  * GNU Robots is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,30 @@
  * along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UI_WINDOW_PRIVATE_H__
-#define __UI_WINDOW_PRIVATE_H__
+#include "ui-arena.h"
 
-G_BEGIN_DECLS
-
-struct _UIWindowPrivate
+struct _UIArenaPrivate
 {
-	GtkWidget *cmdwin;
-	GtkWidget *arena;
+	int dummy;
 };
 
-G_END_DECLS
+#define UI_ARENA_GET_PRIVATE(obj) \
+    G_TYPE_INSTANCE_GET_PRIVATE(obj, UI_TYPE_ARENA, UIArenaPrivate)
 
-#endif /* __UI_WINDOW_PRIVATE_H__ */
+G_DEFINE_TYPE(UIArena, ui_arena, GTK_TYPE_DRAWING_AREA)
+
+GtkWidget *ui_arena_new(void)
+{
+	return GTK_WIDGET(g_object_new(UI_TYPE_ARENA, NULL));
+}
+
+static void ui_arena_init(UIArena *arena)
+{
+	gtk_widget_set_size_request(GTK_WIDGET(arena), 40*16,18*16);
+}
+
+static void ui_arena_class_init(UIArenaClass *klass)
+{
+	g_type_class_add_private(G_OBJECT_CLASS(klass),
+		sizeof(UIArenaPrivate));
+}

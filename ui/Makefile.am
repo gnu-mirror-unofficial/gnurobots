@@ -19,5 +19,5 @@ bin_PROGRAMS = uitest
 
 INCLUDES = $(GTK_CFLAGS) -I$(top_builddir)/ui/
 
-uitest_SOURCES = main.c ui-window.c
+uitest_SOURCES = main.c ui-window.c ui-arena.c ui-cmdwin.c
 uitest_LDFLAGS = $(GTK_LIBS)

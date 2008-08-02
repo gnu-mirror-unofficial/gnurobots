@@ -1,6 +1,6 @@
 /* Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
- * GNU Robots UI Test, ui-window-private.h.
+ * GNU Robots, ui-cmdwin.c
  *
  * GNU Robots is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,30 @@
  * along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __UI_WINDOW_PRIVATE_H__
-#define __UI_WINDOW_PRIVATE_H__
+#include "ui-cmdwin.h"
 
-G_BEGIN_DECLS
-
-struct _UIWindowPrivate
+struct _UICmdWinPrivate
 {
-	GtkWidget *cmdwin;
-	GtkWidget *arena;
+	int dummy;
 };
 
-G_END_DECLS
+#define UI_CMDWIN_GET_PRIVATE(obj) \
+    G_TYPE_INSTANCE_GET_PRIVATE(obj, UI_TYPE_CMDWIN, UICmdWinPrivate)
 
-#endif /* __UI_WINDOW_PRIVATE_H__ */
+G_DEFINE_TYPE(UICmdWin, ui_cmdwin, GTK_TYPE_VBOX)
+
+GtkWidget *ui_cmdwin_new(void)
+{
+	return GTK_WIDGET(g_object_new(UI_TYPE_CMDWIN, NULL));
+}
+
+static void ui_cmdwin_init(UICmdWin *cmdwin)
+{
+	gtk_widget_set_size_request(GTK_WIDGET(cmdwin), 40*16,200);
+}
+
+static void ui_cmdwin_class_init(UICmdWinClass *klass)
+{
+	g_type_class_add_private(G_OBJECT_CLASS(klass),
+		sizeof(UICmdWinPrivate));
+}
