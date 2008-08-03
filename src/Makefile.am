@@ -28,5 +28,5 @@ INCLUDES = $(GUILE_CFLAGS) $(READLINE_CFLAGS) $(GTK2_CFLAGS) $(VTE_CFLAGS) \
 
 gnurobots_SOURCES = main.c api.c map.c grobot.c \
 		ui-window.c ui-cmdwin.c ui-arena.c
-gnurobots_LDFLAGS = $(GUILE_LIBS) $(READLINE_LIBS) $(GTHREAD2_LIBS) \
+gnurobots_LDFLAGS = $(GUILE_LDFLAGS) $(READLINE_LIBS) $(GTHREAD2_LIBS) \
 		$(GTK2_LIBS) $(VTE_LIBS) -lutil

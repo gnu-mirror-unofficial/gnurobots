@@ -26,9 +26,7 @@ AM_INIT_AUTOMAKE
 dnl Checks for programs.
 AC_PROG_CC
 
-PKG_CHECK_MODULES(GUILE, guile-1.8)
-AC_SUBST(GUILE_LIBS)
-AC_SUBST(GUILE_CFLAGS)
+GUILE_FLAGS
 
 PKG_CHECK_MODULES(GTHREAD2, gthread-2.0 >= 2.4)
 AC_SUBST(GTHREAD2_LIBS)
@@ -78,9 +76,15 @@ AC_CHECK_HEADERS(unistd.h)
 AC_CHECK_HEADERS(getopt.h)
 AC_CHECK_HEADERS(pty.h)
 
-AC_CHECK_LIB(util, openpty,	[], AC_MSG_ERROR([
+AC_CHECK_LIB(util, openpty, [], AC_MSG_ERROR([
 
-You need openpty to build the program.
+You need openpty to build this program.
+
+]))
+
+AC_CHECK_LIB(guile, scm_to_locale_string, [], AC_MSG_ERROR([
+
+You need guile 1.8 to build this program.
 
 ]))
 
