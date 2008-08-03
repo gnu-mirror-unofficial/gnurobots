@@ -1,5 +1,9 @@
 2008-08-03  Bradley Smith  <brad@brad-smith.co.uk>
 
+	Make minor corrections to build system.
+
+	Generate Changelog
+
 	Make corrections/additions to documents.
 
 	Bump version to 1.2.0
