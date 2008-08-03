@@ -1,6 +1,6 @@
 /* Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
- * GNU Robots UI Test, ui-window-private.h.
+ * GNU Robots, ui-window-private.h.
  *
  * GNU Robots is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

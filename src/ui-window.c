@@ -1,6 +1,6 @@
 /* Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
  *
- * GNU Robots UI Test, ui-window.c.
+ * GNU Robots, ui-window.c.
  *
  * GNU Robots is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ static void ui_window_init(UIWindow *window)
 	g_signal_connect(G_OBJECT(window), "destroy",
 		G_CALLBACK(on_ui_window_destroy), NULL);
 
-	gtk_window_set_title(GTK_WINDOW(window), "UI Test");
+	gtk_window_set_title(GTK_WINDOW(window), "GNU Robots");
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 }
 
