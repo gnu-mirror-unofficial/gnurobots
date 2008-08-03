@@ -1,4 +1,22 @@
+2008-08-03  Bradley Smith  <brad@brad-smith.co.uk>
+
+	Make corrections/additions to documents.
+
+	Bump version to 1.2.0
+
+	Correct Window title.
+
+	Use pkg-config to check for Guile 1.8.
+
+	Fix bootstraping.
+
+	Add Gtk interface. Using a Vte for guile input.
+
 2008-08-02  Bradley Smith  <brad@brad-smith.co.uk>
+
+	Add more uitest stuff.
+
+	Adjust Changelogs.
 
 	Add new graphics. Thanks to Eric P. Hutchins <hutchiep190@potsdam.edu>
 
