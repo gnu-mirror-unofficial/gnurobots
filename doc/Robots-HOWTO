@@ -167,7 +167,7 @@ print nothing.
 			       particular thing.  If the thing is
 			       seen, the function return returns a
 			       true (`#t') value.  Note that this is
-			       sort of a braindead function, in that
+			       sort of a brain-dead function, in that
 			       it does not provide the distance to the
 			       thing.  The robot cannot look behind
 			       objects, so if you look for a food

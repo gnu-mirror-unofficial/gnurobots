@@ -1,10 +1,19 @@
 RELEASE HISTORY FOR GNU ROBOTS:
 _____________________________________________________________________
 
+1.2.0 Gtk UI Release.
+
+      Move UI away from Xlib to Gtk.
+      Add Vte for interactive input.
+      Brand new graphics courtesy of Eric P. Hutchins.
+      Various minor bugfixes.
+      Marks the beginnings of the fully fledged 'Robot development
+      environment'.
+
 1.1.0 Bug fix release.
 
-      Imporve GUI, including proper handling of X events.
-      Scrap plugable UI's in preperation for GTK GUI.
+      Improve GUI, including proper handling of X events.
+      Scrap plug-able UI's in preparation for GTK GUI.
       General clean up.
 
 1.0D  Added some extra documentation (but not much) and the early

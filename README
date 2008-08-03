@@ -44,7 +44,7 @@ Notes
 *
 * This programming interface would really just act as a kind of code
 * generator; it would write a Scheme program that you could then load
-* into GNU Robots.  Writing this in GTK+ would seem like a good idea.
+* into GNU Robots.
 *
 * This will hopefully be in the next release!
 

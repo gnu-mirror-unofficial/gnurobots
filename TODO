@@ -7,11 +7,9 @@ _____________________________________________________________________
 THINGS TO DO:
 _____________________________________________________________________
 
-* Add GTK GUI.
+* Add 'Robot development environment'
 
 * Add graphical map designer.
-
-* Better graphics?
 
 * In version 2.0, more creatures will get added. The things called
   "baddie" and "food" and "prize" will be generic descriptors.  For
