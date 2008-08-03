@@ -17,6 +17,5 @@
 
 AUTOMAKE_OPTIONS     = 1.8.5
 SUBDIRS              = contrib doc include maps scheme src xpm
-EXTRA_DIST           = build
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure
 

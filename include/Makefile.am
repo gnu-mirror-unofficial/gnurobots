@@ -22,5 +22,6 @@ EXTRA_DIST = \
  main.h \
  grobot.h \
  ui-window.h \
+ ui-window-private.h \
  ui-arena.h \
  ui-cmdwin.h
