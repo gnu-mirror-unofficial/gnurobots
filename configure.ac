@@ -20,16 +20,11 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT([GNU Robots], [1.1.1], [brad@brad-smith.co.uk], [gnurobots])
 AC_PREREQ([2.59])
 AM_CONFIG_HEADER([config.h])
-AC_CONFIG_AUX_DIR([build])
 AC_CONFIG_SRCDIR([include/api.h])
 AM_INIT_AUTOMAKE
 
 dnl Checks for programs.
 AC_PROG_CC
-
-dnl libtool stuff
-AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
 
 dnl Check for guile
 GUILE_FLAGS
