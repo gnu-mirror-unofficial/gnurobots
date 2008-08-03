@@ -19,6 +19,8 @@
 #ifndef __UI_WINDOW_H__
 #define __UI_WINDOW_H__
 
+#include "map.h"
+
 #include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
@@ -51,7 +53,8 @@ struct _UIWindowClass
 
 GType ui_window_get_type(void) G_GNUC_CONST;
 
-GtkWidget *ui_window_new(void);
+GtkWidget *ui_window_new();
+void ui_window_postinit(UIWindow *window, Map* map);
 
 G_END_DECLS
 

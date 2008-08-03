@@ -17,14 +17,16 @@
 
 bin_PROGRAMS = gnurobots
 
-INCLUDES = $(GLIB2_CFLAGS) $(GUILE_CFLAGS) $(READLINE_CFLAGS) $(X_FLAGS) \
+INCLUDES = $(GUILE_CFLAGS) $(READLINE_CFLAGS) $(GTK2_CFLAGS) $(VTE_CFLAGS) \
+		$(GTHREAD2_CFLAGS) \
 		-I$(top_builddir)/include \
-	   -DPKGLIBDIR=\"$(pkglibdir)\" \
-	   -DABS_TOP_BUILDDIR=\"$(abs_top_builddir)\" \
-	   -DPKGDATADIR=\"$(pkgdatadir)\" \
-	   -DMAPS_PATH=\"$(mapsdir)\" \
-	   -DSCRIPTS_PATH=\"$(schemedir)\"
+	   	-DPKGLIBDIR=\"$(pkglibdir)\" \
+	   	-DABS_TOP_BUILDDIR=\"$(abs_top_builddir)\" \
+	   	-DPKGDATADIR=\"$(pkgdatadir)\" \
+	   	-DMAPS_PATH=\"$(mapsdir)\" \
+	   	-DSCRIPTS_PATH=\"$(schemedir)\"
 
-gnurobots_SOURCES = main.c api.c map.c grobot.c userinterface.c
-gnurobots_LDFLAGS = $(GLIB2_LIBS) $(GUILE_LDFLAGS) $(READLINE_LIBS) \
-		$(X_LIBS) -lltdl -lgthread-2.0
+gnurobots_SOURCES = main.c api.c map.c grobot.c \
+		ui-window.c ui-cmdwin.c ui-arena.c
+gnurobots_LDFLAGS = $(GUILE_LDFLAGS) $(READLINE_LIBS) $(GTHREAD2_LIBS) \
+		$(GTK2_LIBS) $(VTE_LIBS) -lutil

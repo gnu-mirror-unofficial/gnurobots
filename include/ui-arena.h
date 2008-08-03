@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "map.h"
+
 G_BEGIN_DECLS
 
 #define UI_TYPE_ARENA \
@@ -33,6 +35,8 @@ G_BEGIN_DECLS
     G_TYPE_CHECK_INSTANCE_TYPE(obj, UI_TYPE_ARENA)
 #define IS_UI_ARENA_CLASS(klass) \
     G_TYPE_CHECK_CLASS_TYPE(klass, UI_TYPE_ARENA)
+
+#define dist(f_x, f_y, t_x, t_y) (abs((f_x)-(t_x))+abs((f_y)-(t_y)))
 
 typedef struct _UIArena UIArena;
 typedef struct _UIArenaClass UIArenaClass;
@@ -51,7 +55,28 @@ struct _UIArenaClass
 
 GType ui_arena_get_type(void) G_GNUC_CONST;
 
-GtkWidget *ui_arena_new(void);
+GtkWidget *ui_arena_new();
+
+void ui_arena_set_map(UIArena *arena, Map *map);
+void ui_arena_postinit(UIArena *arena);
+void ui_arena_draw(UIArena *arena);
+void ui_arena_update_status(UIArena *arena, const gchar *s, glong energy,
+	glong score, glong shields);
+
+void ui_arena_add_thing(UIArena *arena, gint x, gint y, gint thing);
+void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
+	gint to_x, gint to_y, gint cdir, glong energy, glong score,
+	glong shields);
+void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
+	glong energy, glong score, glong shields);
+void ui_arena_robot_zap(UIArena *arena, gint x, gint y, gint cdir,
+	gint x_to, gint y_to, glong energy, glong score, glong shields);
+void ui_arena_robot_feel(UIArena *arena, gint x, gint y, gint cdir,
+	gint x_to, gint y_to, glong energy, glong score, glong shields);
+void ui_arena_robot_grab(UIArena *arena, gint x, gint y, gint cdir,
+	gint x_to, gint y_to, glong energy, glong score, glong shields);
+void ui_arena_robot_look(UIArena *arena, gint x, gint y, gint cdir,
+	gint x_to, gint y_to, glong energy, glong score, glong shields);
 
 G_END_DECLS
 

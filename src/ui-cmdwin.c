@@ -18,9 +18,16 @@
 
 #include "ui-cmdwin.h"
 
+#include <stdlib.h>
+#include <pty.h>
+
+#include <vte/vte.h>
+#include <readline.h>
+#include <history.h>
+
 struct _UICmdWinPrivate
 {
-	int dummy;
+	GtkWidget *vte;
 };
 
 #define UI_CMDWIN_GET_PRIVATE(obj) \
@@ -35,11 +42,46 @@ GtkWidget *ui_cmdwin_new(void)
 
 static void ui_cmdwin_init(UICmdWin *cmdwin)
 {
-	gtk_widget_set_size_request(GTK_WIDGET(cmdwin), 40*16,200);
+	int master_pty, slave_pty;
+	FILE *in, *out;
+
+	cmdwin->priv = UI_CMDWIN_GET_PRIVATE(cmdwin);
+
+	cmdwin->priv->vte = vte_terminal_new();
+
+	gtk_box_pack_start(GTK_BOX(cmdwin), cmdwin->priv->vte, TRUE, TRUE, 0);
+
+	gtk_widget_set_size_request(GTK_WIDGET(cmdwin), -1, 200);
+
+	g_assert(openpty(&master_pty, &slave_pty, NULL, NULL, NULL) >= 0);
+	vte_terminal_set_pty(VTE_TERMINAL(cmdwin->priv->vte), master_pty);
+	in = fdopen(slave_pty, "r");
+	out = fdopen(slave_pty, "w");
+
+	rl_instream = in;
+	rl_outstream = out;
+
+	gtk_widget_show(cmdwin->priv->vte);
 }
 
 static void ui_cmdwin_class_init(UICmdWinClass *klass)
 {
 	g_type_class_add_private(G_OBJECT_CLASS(klass),
 		sizeof(UICmdWinPrivate));
+}
+
+void ui_cmdwin_get_string(UICmdWin *cmdwin, gchar *prompt, gchar *buf,
+	gint len)
+{
+	char *line = (char *)NULL;
+
+	line = readline(prompt);
+
+	if (line && *line)
+	{
+		add_history(line);
+		g_strlcpy(buf, line, len);
+	}
+
+	free(line);
 }

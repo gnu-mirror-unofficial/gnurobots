@@ -22,6 +22,10 @@
 #include "ui-cmdwin.h"
 #include "ui-arena.h"
 
+#include "main.h"
+#include "map.h"
+#include "configs.h"
+
 #include <gtk/gtkmain.h>
 
 #define UI_WINDOW_GET_PRIVATE(obj) \
@@ -31,7 +35,7 @@ G_DEFINE_TYPE(UIWindow, ui_window, GTK_TYPE_WINDOW)
 
 static void on_ui_window_destroy(GtkWidget *widget, gpointer data);
 
-GtkWidget *ui_window_new(void)
+GtkWidget *ui_window_new()
 {
 	return GTK_WIDGET(g_object_new(UI_TYPE_WINDOW, NULL));
 }
@@ -40,37 +44,41 @@ static void on_ui_window_destroy(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_hide(widget);
 	gtk_main_quit();
+	exit_nicely();
 }
 
 static void ui_window_init(UIWindow *window)
 {
-	GtkWidget *vbox;
-	GtkWidget *vpaned;
-
 	window->priv = UI_WINDOW_GET_PRIVATE(window);
-
-	vbox = gtk_vbox_new(FALSE, 0);
-	vpaned = gtk_vpaned_new();
-	window->priv->cmdwin = ui_cmdwin_new();
-	window->priv->arena = ui_arena_new();
-
-	gtk_paned_add1(GTK_PANED(vpaned), window->priv->arena);
-	gtk_paned_add2(GTK_PANED(vpaned), window->priv->cmdwin);
-
-	/* TODO: Add menu first etc */
-	gtk_box_pack_start(GTK_BOX(vbox), vpaned, TRUE, TRUE, 0);
-
-	gtk_container_add(GTK_CONTAINER(window), vbox);
 
 	g_signal_connect(G_OBJECT(window), "destroy",
 		G_CALLBACK(on_ui_window_destroy), NULL);
 
 	gtk_window_set_title(GTK_WINDOW(window), "UI Test");
+	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+}
+
+void ui_window_postinit(UIWindow *window, Map* map)
+{
+	GtkWidget *vbox;
+
+	vbox = gtk_vbox_new(FALSE, 2);
+	window->priv->cmdwin = ui_cmdwin_new();
+	window->priv->arena = ui_arena_new();
+	ui_arena_set_map(UI_ARENA(window->priv->arena), map);
+
+	/* TODO: Add menu first etc */
+	gtk_box_pack_start(GTK_BOX(vbox), window->priv->arena, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), window->priv->cmdwin, TRUE, TRUE, 0);
+
+	gtk_container_add(GTK_CONTAINER(window), vbox);
+
 	gtk_widget_show(window->priv->cmdwin);
 	gtk_widget_show(window->priv->arena);
-	gtk_widget_show(vpaned);
 	gtk_widget_show(vbox);
 	gtk_widget_show(GTK_WIDGET(window));
+
+	ui_arena_postinit(UI_ARENA(window->priv->arena));
 }
 
 static void ui_window_class_init(UIWindowClass *klass)

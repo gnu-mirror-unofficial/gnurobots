@@ -28,51 +28,29 @@ dnl Checks for programs.
 AC_PROG_CC
 
 dnl libtool stuff
-AC_LIBTOOL_DLOPEN
-dnl AC_LIBLTDL_CONVENIENCE
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
-
-AC_SUBST(INCLTDL)
-AC_SUBST(LIBLTDL)
-
-dnl Locate X Windows
-dnl We need AC_PATH_XTRA to also locate extra libaries X depends on.
-dnl It will ``export'' X_CFLAGS, X_PRE_LIBS, X_EXTRA_LIBS and X_LIBS,
-dnl but for some reason we need to add -lX11 ourselves.
-AC_PATH_XTRA
-
-dnl Check for math library
-AC_CHECK_LIB(m, pow)
 
 dnl Check for guile
 GUILE_FLAGS
 
-dnl Some sytems need -ldl for dynamic library support.
-dnl AC_CHECK_LIB(dl, dlopen)
+PKG_CHECK_MODULES(GTHREAD2, gthread-2.0 >= 2.4)
+AC_SUBST(GTHREAD2_LIBS)
+AC_SUBST(GTHREAD2_CFLAGS)
 
-PKG_CHECK_MODULES(X,x11 xpm, HAVE_X=yes,HAVE_X=no)
-AC_SUBST(X_LIBS)
-AC_SUBST(X_CFLAGS)
+PKG_CHECK_MODULES(GTK2, gtk+-2.0 >= 2.4)
+AC_SUBST(GTK2_LIBS)
+AC_SUBST(GTK2_CFLAGS)
 
-dnl Check for glib2
-PKG_CHECK_MODULES(GLIB2,glib-2.0 >= 2.4 gobject-2.0 gmodule-2.0,HAVE_GLIB2=yes,HAVE_GLIB2=no)
-AC_SUBST(GLIB2_LIBS)
-AC_SUBST(GLIB2_CFLAGS)
-
-PKG_CHECK_MODULES(GTK,gtk+-2.0 >= 2.4, HAVE_GTK=yes,HAVE_GTK=no)
-AC_SUBST(GTK_LIBS)
-AC_SUBST(GTK_CFLAGS)
+PKG_CHECK_MODULES(VTE, vte)
+AC_SUBST(VTE_LIBS)
+AC_SUBST(VTE_CFLAGS)
 
 schemedir="\$(pkgdatadir)/scheme"
 AC_SUBST(schemedir)
 
 mapsdir="\$(pkgdatadir)/maps"
 AC_SUBST(mapsdir)
-
-if test "x$HAVE_GLIB2" = "xno"; then
-  AC_MSG_ERROR([GNU Robots requires GLib2 to compile.])
-fi
 
 for termlib in ncurses curses termcap terminfo termlib ; do
 	AC_CHECK_LIB(${termlib}, tgoto,
@@ -86,8 +64,8 @@ You need the GNU Readline library to build this program.
 
 ]),[$READLINE_EXTRA])
 
-AC_CHECK_HEADER(readline/readline.h,[READLINE_CFLAGS=-I/usr/include/readline/],
-	AC_MSG_ERROR([
+AC_CHECK_HEADER(readline/readline.h,
+    [READLINE_CFLAGS=-I/usr/include/readline/],	AC_MSG_ERROR([
 
 You need the GNU Readline headers to build this program.
 
@@ -102,6 +80,13 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h)
 AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_HEADERS(pty.h)
+
+AC_CHECK_LIB(util, openpty,	[], AC_MSG_ERROR([
+
+You need openpty to build the program.
+
+]))
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -117,7 +102,6 @@ AC_CONFIG_FILES([Makefile
  maps/Makefile
  scheme/Makefile
  src/Makefile
- ui/Makefile
  ])
 AC_OUTPUT
 

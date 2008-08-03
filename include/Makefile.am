@@ -15,10 +15,12 @@
 ## You should have received a copy of the GNU General Public License
 ## along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.
 
-EXTRA_DIST =\
- api.h\
- configs.h\
- map.h\
- main.h\
- grobot.h\
- userinterface.h
+EXTRA_DIST = \
+ api.h \
+ configs.h \
+ map.h \
+ main.h \
+ grobot.h \
+ ui-window.h \
+ ui-arena.h \
+ ui-cmdwin.h

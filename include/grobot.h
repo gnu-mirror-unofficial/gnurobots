@@ -21,7 +21,7 @@
 
 #include <glib-object.h>
 #include <glib.h>
-#include "userinterface.h"
+#include "ui-arena.h"
 #include "map.h"
 
 G_BEGIN_DECLS
@@ -53,7 +53,7 @@ struct _GRobot {
   glong     shots;
   glong     units;
 
-  UserInterface *ui;
+  UIArena *ui;
   Map *map;
 };
 
@@ -73,7 +73,7 @@ GType g_robot_get_type(void) G_GNUC_CONST;
 
 /* Our object functions */
 GRobot* g_robot_new(int x, int y, int dir, long score, long energy,
-        long shield, long units, long shots, UserInterface *ui, Map *map);
+        long shield, long units, long shots, UIArena *ui, Map *map);
 
 void        g_robot_turn            (GRobot *robot, gint num_turns);
 gboolean    g_robot_move            (GRobot *robot, gint steps);
