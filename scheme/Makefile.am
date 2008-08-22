@@ -17,7 +17,7 @@
 
 schemedir = $(pkgdatadir)/scheme
 
-scheme_SCRIPTS =\
+scheme_DATA =\
  beep.scm\
  greedy.scm\
  mapper.scm\
