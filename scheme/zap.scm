@@ -1,5 +1,5 @@
 ;;; zap.scm
-;;; Sample robot provided by Jim Hall <jhall1@isd.net>
+;;; Sample robot provided by Jim Hall <jhall@freedos.org>
 ;;; This is an agressive little robot that will just turn 360-degrees,
 ;;; and will immediately zap anything that isn't a space.  This builds
 ;;; on the beep.scm robot program, so it will also beep if it finds a

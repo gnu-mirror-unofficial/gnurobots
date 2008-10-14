@@ -1,5 +1,5 @@
 ;;; beep.scm
-;;; Sample robot provided by Jim Hall <jhall1@isd.net>
+;;; Sample robot provided by Jim Hall <jhall@freedos.org>
 ;;; This robot will just turn around 360-degrees, and will beep if it finds
 ;;; a prize item.  This is similar to a radar.
 

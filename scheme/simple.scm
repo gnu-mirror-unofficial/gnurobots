@@ -1,5 +1,5 @@
 ;;; simple.scm
-;;; Sample robot provided by Jim Hall <jhall1@isd.net>
+;;; Sample robot provided by Jim Hall <jhall@freedos.org>
 ;;; This robot will simply hunt down and grab any prizes in its direct
 ;;; line of sight.  If it runs into an obstacle, it turns right and
 ;;; continues from there.  When it has turned 360-degrees, it stops.

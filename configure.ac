@@ -1,4 +1,4 @@
-## Copyright (C) 1998 Jim Hall <jhall1@isd.net>
+## Copyright (C) 1998 Jim Hall <jhall@freedos.org>
 ## Copyright (C) 2008 Bradley Smith <brad@brad-smith.co.uk>
 ##
 ## configure.ac for GNU Robots

@@ -1,5 +1,5 @@
 ;;; stop.scm
-;;; Sample robot provided by Jim Hall <jhall1@isd.net>
+;;; Sample robot provided by Jim Hall <jhall@freedos.org>
 ;;; THIS ROBOT IS NOT REALLY INTENDED FOR PUBLIC CONSUMPTION!
 ;;; Tests my new `stop' and `quit' primitives for GNU Robots
 
