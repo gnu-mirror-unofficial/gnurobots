@@ -365,7 +365,7 @@ void g_robot_turn(GRobot *robot, gint num_turns)
 gboolean g_robot_move(GRobot *robot, gint steps)
 {
 	gint x_to, y_to;
-	gint dx, dy;
+	gint dx = 0, dy = 0;
 	gint i;
 
 	g_return_val_if_fail(robot->ui != NULL && robot->map != NULL, FALSE);
@@ -509,7 +509,7 @@ gboolean g_robot_feel(GRobot *robot, gchar *str)
 {
 	gint th;
 	gint x_to, y_to;
-	gint dx, dy;
+	gint dx = 0, dy = 0;
 
 	g_return_val_if_fail(robot->ui != NULL && robot->map != NULL, FALSE);
 
@@ -573,7 +573,7 @@ gboolean g_robot_look(GRobot *robot, gchar *str)
 {
 	gint th;
 	gint x_to, y_to;
-	gint dx, dy;
+	gint dx = 0, dy = 0;
 
 	g_return_val_if_fail(robot->ui != NULL && robot->map != NULL, FALSE);
 
@@ -635,7 +635,7 @@ gboolean g_robot_look(GRobot *robot, gchar *str)
 gboolean g_robot_grab(GRobot *robot)
 {
 	gint x_to, y_to;
-	gint dx, dy;
+	gint dx = 0, dy = 0;
 
 	g_return_val_if_fail(robot->ui != NULL && robot->map != NULL, FALSE);
 
@@ -717,7 +717,7 @@ gboolean g_robot_grab(GRobot *robot)
 gboolean g_robot_zap(GRobot *robot)
 {
 	gint x_to, y_to;
-	gint dx, dy;
+	gint dx = 0, dy = 0;
 
 	g_return_val_if_fail(robot->ui != NULL && robot->map != NULL, FALSE);
 

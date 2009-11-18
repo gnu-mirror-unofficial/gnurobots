@@ -282,6 +282,7 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 	gchar *map_file = argv[1];
 	gchar *robot_program = argv[2];
 	gboolean loading = TRUE;
+	volatile gboolean *ploading = &loading;
 
 	api_init();
 
@@ -304,7 +305,7 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 		G_ROBOT_POSITION_X(robot), ROBOT);
 
 	g_printf("Loading GTK Interface ... Please wait\n\n");
-	while(loading);
+	while(*ploading);
 
 	/* Now initialize the rest of the Robot properties */
 	g_object_set(G_OBJECT(robot),
