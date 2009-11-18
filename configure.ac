@@ -91,8 +91,6 @@ You need guile 1.8 to build this program.
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-CFLAGS="-pedantic-errors -Werror -Wall -g"
-
 dnl Done.
 AC_CONFIG_FILES([Makefile
  contrib/Makefile
