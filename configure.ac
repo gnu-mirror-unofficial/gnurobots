@@ -82,9 +82,9 @@ You need openpty to build this program.
 
 ]))
 
-AC_CHECK_LIB(guile, scm_to_locale_string, [], AC_MSG_ERROR([
+AC_CHECK_LIB(guile-2.0, scm_to_locale_string, [], AC_MSG_ERROR([
 
-You need guile 1.8 to build this program.
+You need guile 2.0 to build this program.
 
 ]))
 

@@ -21,7 +21,7 @@
 #define _API_H
 
 #include <glib.h>
-#include <guile/gh.h>           /* GNU Guile high */
+#include <libguile.h>           /* GNU Guile high */
 
 void		api_init			(void);
 

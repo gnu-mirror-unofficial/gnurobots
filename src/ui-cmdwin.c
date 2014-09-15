@@ -22,7 +22,7 @@
 #include <pty.h>
 
 #include <vte/vte.h>
-#include <readline.h>
+#include <readline/readline.h>
 #include <history.h>
 
 struct _UICmdWinPrivate
