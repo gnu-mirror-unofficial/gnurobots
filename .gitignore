@@ -22,4 +22,5 @@ ui/uitest
 /depcomp
 /install-sh
 /missing
+/compile
 *~
