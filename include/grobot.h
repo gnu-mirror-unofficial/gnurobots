@@ -66,7 +66,10 @@ struct _GRobotClass {
 /* some convenient macros */
 #define G_ROBOT_POSITION_X(robot)   ((robot)->x)
 #define G_ROBOT_POSITION_Y(robot)   ((robot)->y)
-#define sign(x)                     (x/abs(x))
+
+/* this is a little weird, but 0 case doesn't actually matter
+   given how the code in grobot.c uses this macro... */
+#define sign(x)                     (x ? x/abs(x) : 0)
 
 /* normal GObject stuff */
 GType g_robot_get_type(void) G_GNUC_CONST;
