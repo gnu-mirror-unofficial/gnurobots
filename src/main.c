@@ -325,22 +325,25 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 	}
 	else
 	{
-		gchar buf[BUFF_LEN];
-
 		g_printf
 			("Robot program not specified. Entering interactive mode..\n");
 
-		while (1)
-		{
-			memset(&buf, 0, BUFF_LEN);
-
-			ui_cmdwin_get_string(UI_CMDWIN(ui->priv->cmdwin), "guile> ",
-				buf, BUFF_LEN);
-
-			scm_internal_catch(SCM_BOOL_T,
-				(scm_t_catch_body) scm_c_eval_string, buf,
-				catch_handler, NULL);
-		}
+		scm_internal_catch(SCM_BOOL_T,
+		                   (scm_t_catch_body) scm_c_use_module,
+		                   "ice-9 readline",
+		                   catch_handler, NULL);
+		scm_internal_catch(SCM_BOOL_T,
+		                   (scm_t_catch_body) scm_c_eval_string,
+		                   "(activate-readline)",
+		                   catch_handler, NULL);
+		scm_internal_catch(SCM_BOOL_T,
+		                   (scm_t_catch_body) scm_c_use_module,
+		                   "system repl repl",
+		                   catch_handler, NULL);
+		scm_internal_catch(SCM_BOOL_T,
+		                   (scm_t_catch_body) scm_c_eval_string,
+		                   "(start-repl)",
+		                   catch_handler, NULL);
 	}
 
 	/* done */

@@ -68,19 +68,3 @@ static void ui_cmdwin_class_init(UICmdWinClass *klass)
 	g_type_class_add_private(G_OBJECT_CLASS(klass),
 		sizeof(UICmdWinPrivate));
 }
-
-void ui_cmdwin_get_string(UICmdWin *cmdwin, gchar *prompt, gchar *buf,
-	gint len)
-{
-	char *line = (char *)NULL;
-
-	line = readline(prompt);
-
-	if (line && *line)
-	{
-		add_history(line);
-		g_strlcpy(buf, line, len);
-	}
-
-	free(line);
-}

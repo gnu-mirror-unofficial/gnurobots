@@ -52,8 +52,6 @@ struct _UICmdWinClass
 GType ui_cmdwin_get_type(void) G_GNUC_CONST;
 
 GtkWidget *ui_cmdwin_new(void);
-void ui_cmdwin_get_string(UICmdWin *cmdwin, gchar *prompt, gchar *buf,
-	gint len);
 
 G_END_DECLS
 
