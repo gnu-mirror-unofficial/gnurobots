@@ -51,6 +51,9 @@ api_robot_smell (SCM s_th)
   gboolean ret;
   gchar *str;
 
+  if (scm_symbol_p (s_th) == SCM_BOOL_T) {
+    s_th = scm_symbol_to_string (s_th);
+  }
   str = scm_to_locale_string (s_th);
   ret = g_robot_smell (robot, str);
 
@@ -63,6 +66,9 @@ api_robot_feel (SCM s_th)
   gboolean ret;
   gchar *str;
 
+  if (scm_symbol_p (s_th) == SCM_BOOL_T) {
+    s_th = scm_symbol_to_string (s_th);
+  }
   str = scm_to_locale_string (s_th);
   ret = g_robot_feel (robot, str);
 
@@ -75,6 +81,9 @@ api_robot_look (SCM s_th)
   gboolean ret;
   gchar *str;
 
+  if (scm_symbol_p (s_th) == SCM_BOOL_T) {
+    s_th = scm_symbol_to_string (s_th);
+  }
   str = scm_to_locale_string (s_th);
   ret = g_robot_look (robot, str);
 
