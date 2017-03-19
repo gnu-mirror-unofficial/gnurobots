@@ -57,7 +57,10 @@ static void ui_window_init(UIWindow *window)
 	gtk_window_set_title(GTK_WINDOW(window), "GNU Robots");
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
+	/* stdio is redirected in here...: */
 	window->priv->cmdwin = ui_cmdwin_new();
+	/* ^so that's needed before guile can start... */
+
 	window->priv->arena = ui_arena_new();
 }
 

@@ -43,7 +43,6 @@ GtkWidget *ui_cmdwin_new(void)
 static void ui_cmdwin_init(UICmdWin *cmdwin)
 {
 	int master_pty, slave_pty;
-	FILE *in, *out;
 
 	cmdwin->priv = UI_CMDWIN_GET_PRIVATE(cmdwin);
 
@@ -54,12 +53,12 @@ static void ui_cmdwin_init(UICmdWin *cmdwin)
 	gtk_widget_set_size_request(GTK_WIDGET(cmdwin), -1, 200);
 
 	g_assert(openpty(&master_pty, &slave_pty, NULL, NULL, NULL) >= 0);
-	vte_terminal_set_pty(VTE_TERMINAL(cmdwin->priv->vte), master_pty);
-	in = fdopen(slave_pty, "r");
-	out = fdopen(slave_pty, "w");
 
-	rl_instream = in;
-	rl_outstream = out;
+	dup2(slave_pty, 0);
+	dup2(slave_pty, 1);
+	dup2(slave_pty, 2);
+
+	vte_terminal_set_pty(VTE_TERMINAL(cmdwin->priv->vte), master_pty);
 
 	gtk_widget_show(cmdwin->priv->vte);
 }
