@@ -405,10 +405,6 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 		/* no matter what, this took energy */
 
 		robot->energy -= 2;
-		if (robot->energy < 1)
-		{
-			g_signal_emit(robot, g_robot_signals[DEATH], 0);
-		}
 
 		switch (MAP_GET_OBJECT(robot->map, x_to, y_to))
 		{
@@ -422,10 +418,6 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 		case BADDIE:
 			/* Damage */
 			robot->shields -= 10;
-			if (robot->shields < 1)
-			{
-				g_signal_emit(robot, g_robot_signals[DEATH], 0);
-			}
 
 			x_to = robot->x;
 			y_to = robot->y;
@@ -435,10 +427,6 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 		case WALL:
 			/* less damage */
 			robot->shields -= 2;
-			if (robot->shields < 1)
-			{
-				g_signal_emit(robot, g_robot_signals[DEATH], 0);
-			}
 
 			x_to = robot->x;
 			y_to = robot->y;
@@ -447,10 +435,7 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 
 		default:
 			/* even less damage */
-			if (--robot->shields < 1)
-			{
-				g_signal_emit(robot, g_robot_signals[DEATH], 0);
-			}
+			robot->shields -= 1;
 
 			x_to = robot->x;
 			y_to = robot->y;
@@ -465,6 +450,11 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 		ui_arena_move_robot(robot->ui, robot->x, robot->y, x_to, y_to,
 			robot->dir, robot->energy, robot->score, robot->shields);
 		gdk_threads_leave();
+
+		if (robot->energy < 1 || robot->shields < 1)
+		{
+			g_signal_emit(robot, g_robot_signals[DEATH], 0);
+		}
 
 		if (x_to == robot->x && y_to == robot->y) {
 			/* NOTE: by returning here, we charge only 1 hit
