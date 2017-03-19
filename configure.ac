@@ -24,7 +24,7 @@ AC_CONFIG_SRCDIR([include/api.h])
 AM_INIT_AUTOMAKE
 
 dnl Checks for programs.
-AC_PROG_CC
+AC_PROG_CC_C99
 
 GUILE_FLAGS
 
