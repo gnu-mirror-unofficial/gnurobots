@@ -34,7 +34,7 @@ extern GRobot *robot;
 SCM
 api_robot_turn (SCM s_n)
 {
-  g_robot_turn (robot, scm_num2int (s_n, 0, NULL));
+  g_robot_turn (robot, scm_to_int (s_n));
 
   return SCM_BOOL (TRUE);
 }
@@ -42,7 +42,7 @@ api_robot_turn (SCM s_n)
 SCM
 api_robot_move (SCM s_n)
 {
-  return SCM_BOOL (g_robot_move (robot, scm_num2int (s_n, 0, NULL)));
+  return SCM_BOOL (g_robot_move (robot, scm_to_int (s_n)));
 }
 
 SCM
@@ -107,7 +107,7 @@ api_robot_get_shields (void)
   g_object_get (robot, "shields", &shields, NULL);
 
   /* Returns the robot shields */
-  return (scm_long2num (shields));
+  return (scm_from_long (shields));
 }
 
 SCM
@@ -118,7 +118,7 @@ api_robot_get_energy (void)
   g_object_get (robot, "energy", &energy, NULL);
 
   /* Returns the robot energy */
-  return (scm_long2num (energy));
+  return (scm_from_long (energy));
 }
 
 SCM
@@ -129,7 +129,7 @@ api_robot_get_score (void)
   g_object_get (robot, "score", &score, NULL);
 
   /* Returns the robot score */
-  return (scm_long2num (score));
+  return (scm_from_long (score));
 }
 
 void

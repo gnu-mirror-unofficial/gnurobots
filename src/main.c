@@ -83,9 +83,6 @@ gint main(gint argc, gchar *argv[])
 		{NULL, 0, NULL, 0}
 	};
 
-	/* Initialize the GType system first */
-	g_type_init();
-
 	/* Check command line */
 
 	/* Create a robot Object */
@@ -296,9 +293,8 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 		exit_nicely();
 	}
 
-	g_thread_init(NULL);
 	gdk_threads_init();
-	g_thread_create(callback, &loading, FALSE, NULL);
+	g_thread_unref(g_thread_new(NULL, callback, &loading));
 
 	/* ensure the robot is placed properly */
 	MAP_SET_OBJECT(map, G_ROBOT_POSITION_Y(robot),
