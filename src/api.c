@@ -138,18 +138,26 @@ api_init (void)
   /* define some new builtins (hooks) so that they are available in
      Scheme. */
 
-  scm_c_define_gsubr ("robot-turn", 1, 0, 0, api_robot_turn);
-  scm_c_define_gsubr ("robot-move", 1, 0, 0, api_robot_move);
-  scm_c_define_gsubr ("robot-smell", 1, 0, 0, api_robot_smell);
-  scm_c_define_gsubr ("robot-feel", 1, 0, 0, api_robot_feel);
-  scm_c_define_gsubr ("robot-look", 1, 0, 0, api_robot_look);
-  scm_c_define_gsubr ("robot-grab", 0, 0, 0, api_robot_grab);
-  scm_c_define_gsubr ("robot-zap", 0, 0, 0, api_robot_zap);
+  /* Guile has this function set to expect that function-pointers are
+     passed as (void *), which generates warnings because it's actually
+     illegal in C99 (supposedly because there are architectures where
+     `function pointers' and `object pointers' actually are incompatible);
+     So... jump through hoops to out-guile the system....
+  */
+  typedef SCM (*c99_fakeout_guile)(const char *, int, int, int, SCM(*)());
+  c99_fakeout_guile define_gsubr = (c99_fakeout_guile) scm_c_define_gsubr;
+  define_gsubr ("robot-turn", 1, 0, 0, api_robot_turn);
+  define_gsubr ("robot-move", 1, 0, 0, api_robot_move);
+  define_gsubr ("robot-smell", 1, 0, 0, api_robot_smell);
+  define_gsubr ("robot-feel", 1, 0, 0, api_robot_feel);
+  define_gsubr ("robot-look", 1, 0, 0, api_robot_look);
+  define_gsubr ("robot-grab", 0, 0, 0, api_robot_grab);
+  define_gsubr ("robot-zap", 0, 0, 0, api_robot_zap);
 
-  scm_c_define_gsubr ("robot-get-shields", 0, 0, 0, api_robot_get_shields);
-  scm_c_define_gsubr ("robot-get-energy", 0, 0, 0, api_robot_get_energy);
-  scm_c_define_gsubr ("robot-get-score", 0, 0, 0, api_robot_get_score);
+  define_gsubr ("robot-get-shields", 0, 0, 0, api_robot_get_shields);
+  define_gsubr ("robot-get-energy", 0, 0, 0, api_robot_get_energy);
+  define_gsubr ("robot-get-score", 0, 0, 0, api_robot_get_score);
 
-  scm_c_define_gsubr ("stop", 0, 0, 0, api_robot_stop);
-  scm_c_define_gsubr ("quit", 0, 0, 0, api_robot_stop);
+  define_gsubr ("stop", 0, 0, 0, api_robot_stop);
+  define_gsubr ("quit", 0, 0, 0, api_robot_stop);
 }
