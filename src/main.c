@@ -382,24 +382,30 @@ void gui_main()
 SCM catch_handler(void *data, SCM tag, SCM throw_args)
 {
 
-/*
-  gchar *message = "Couldn't get error message\n";
+  gchar *message = NULL;
 
   if (scm_ilength (throw_args) > 1
       && SCM_NFALSEP (scm_string_p (SCM_CADR (throw_args))))
   {
-    message = SCM_STRING_CHARS (SCM_CADR (throw_args));
+		message = scm_to_locale_string (scm_simple_format (SCM_BOOL_F,
+		                                                   SCM_CADR (throw_args),
+		                                                   SCM_CADDR (throw_args)));
   }
 
   else if (SCM_NFALSEP (scm_symbol_p (tag)))
   {
-    message = SCM_SYMBOL_CHARS (tag);
+		message = scm_to_locale_string (scm_symbol_to_string (tag));
   }
 
+/*
   user_interface_update_status (ui, message, -1, -1, -1);
 */
-
-	g_printf("Invalid Instruction\n");
+	if (message) {
+		g_printf("Invalid Instruction: %s\n", message);
+		free (message);
+	} else {
+		g_printf("Couldn't get error message\n");
+	}
 
 	return SCM_BOOL_F;
 }
