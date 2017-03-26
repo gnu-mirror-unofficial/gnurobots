@@ -350,7 +350,8 @@ gpointer callback(gpointer data)
 
 	/* draw the map */
 	ui_arena_draw(arena);
-	ui_arena_update_status(arena, "Welcome to GNU Robots", -1, -1, -1);
+	ui_arena_update_status(arena, "Welcome to GNU Robots",
+	                       robot->energy, robot->score, robot->shields);
 
 	*(gboolean*)data = FALSE;
 
