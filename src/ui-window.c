@@ -56,16 +56,21 @@ static void ui_window_init(UIWindow *window)
 
 	gtk_window_set_title(GTK_WINDOW(window), "GNU Robots");
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+
+	window->priv->cmdwin = ui_cmdwin_new();
+	window->priv->arena = ui_arena_new();
 }
 
-void ui_window_postinit(UIWindow *window, Map* map)
+void ui_window_postinit(UIWindow *window, Map* volatile* map)
 {
 	GtkWidget *vbox;
 
 	vbox = gtk_vbox_new(FALSE, 2);
-	window->priv->cmdwin = ui_cmdwin_new();
-	window->priv->arena = ui_arena_new();
-	ui_arena_set_map(UI_ARENA(window->priv->arena), map);
+
+	while(!*map); /* wait for map object creation by guile thread */
+
+	/* ... because we need guile to load the map before we do this: */
+	ui_arena_set_map(UI_ARENA(window->priv->arena), *map);
 
 	/* TODO: Add menu first etc */
 	gtk_box_pack_start(GTK_BOX(vbox), window->priv->arena, TRUE, TRUE, 0);

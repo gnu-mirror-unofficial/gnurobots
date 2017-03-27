@@ -49,9 +49,13 @@ GList *robots = NULL;
 GRobot *robot = NULL;		/* The current robot */
 UIWindow *ui;
 UIArena *arena;
-Map *map;
+Map *map = NULL;
+gboolean loading = TRUE;
+volatile gboolean *ploading = &loading;
 
-gpointer callback(gpointer data);
+gpointer callback_scm(gpointer data);
+void gui_init();
+void gui_main();
 SCM catch_handler(void *data, SCM tag, SCM throw_args);
 gint is_file_readable(const gchar * filename);
 
@@ -67,6 +71,7 @@ gint main(gint argc, gchar *argv[])
 
 	gchar maps_path[MAX_PATH], scripts_path[MAX_PATH];
 
+	static
 	gchar *main_argv[5] = { "GNU Robots",
 		NULL,
 		NULL,
@@ -252,7 +257,20 @@ gint main(gint argc, gchar *argv[])
 		main_argv[2] = "";
 	}
 
+	gui_init();
+
+	g_thread_unref(g_thread_new(NULL, callback_scm, main_argv));
+
+	gui_main();
+
+	return 0;				/* never gets here, but keeps compiler happy */
+}
+
+gpointer callback_scm(gpointer data)
+{
 	/* Start Guile environment.  Does not exit */
+	char **main_argv = data;
+
 	g_printf("%s\n", PKGINFO);
 	g_printf("%s\n", COPYRIGHT);
 	g_printf("GNU Robots comes with ABSOLUTELY NO WARRANTY\n");
@@ -264,7 +282,7 @@ gint main(gint argc, gchar *argv[])
 
 	scm_boot_guile(3, main_argv, main_prog, NULL);
 
-	return 0;				/* never gets here, but keeps compiler happy */
+	return NULL; /* never gets here, but keeps compiler happy */
 }
 
 /************************************************************************
@@ -278,8 +296,6 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 {
 	gchar *map_file = argv[1];
 	gchar *robot_program = argv[2];
-	gboolean loading = TRUE;
-	volatile gboolean *ploading = &loading;
 
 	api_init();
 
@@ -292,9 +308,6 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 	{
 		exit_nicely();
 	}
-
-	gdk_threads_init();
-	g_thread_unref(g_thread_new(NULL, callback, &loading));
 
 	/* ensure the robot is placed properly */
 	MAP_SET_OBJECT(map, G_ROBOT_POSITION_Y(robot),
@@ -339,27 +352,33 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 	exit_nicely();
 }
 
-gpointer callback(gpointer data)
+void gui_init()
 {
+	g_printf("Loading GTK Interface ... Please wait\n\n");
+
+	gdk_threads_init();
+	gdk_threads_enter();
 	gtk_init(0, NULL);
 
 	ui = UI_WINDOW(ui_window_new());
-	ui_window_postinit(ui, map);
-
 	arena = UI_ARENA(ui->priv->arena);
+	gdk_threads_leave();
+}
+
+void gui_main()
+{
+	gdk_threads_enter();
+	ui_window_postinit(ui, &map); /* waits for guile to load map... */
 
 	/* draw the map */
 	ui_arena_draw(arena);
 	ui_arena_update_status(arena, "Welcome to GNU Robots",
 	                       robot->energy, robot->score, robot->shields);
 
-	*(gboolean*)data = FALSE;
+	*ploading = FALSE;
 
-	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
-
-	return NULL;
 }
 
 /************************************************************************
@@ -410,26 +429,11 @@ void exit_nicely()
 {
 	glong score, energy, shields, shots, units;
 
-	/* Stop the UI */
-	if (ui != NULL)
-	{
-		g_object_unref(G_OBJECT(ui));
-	}
-
-	/* Get rid of the map object */
-	if (map != NULL)
-	{
-		g_object_unref(G_OBJECT(map));
-	}
-
 	/* Show statistics */
 	g_object_get(G_OBJECT(robot),
 		"shields", &shields,
 		"energy", &energy,
 		"units", &units, "shots", &shots, "score", &score, NULL);
-
-	g_list_foreach(robots, (GFunc) g_object_unref, NULL);
-	g_list_free(robots);
 
 	g_printf(
 		"\n-----------------------STATISTICS-----------------------\n");
@@ -450,8 +454,7 @@ void exit_nicely()
 		g_printf("** Robot ran out of energy.\n");
 	}
 
-	/* Quit program */
-	exit(0);
+	g_thread_exit(0);
 }
 
 /************************************************************************

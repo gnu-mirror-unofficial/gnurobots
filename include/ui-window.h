@@ -54,7 +54,7 @@ struct _UIWindowClass
 GType ui_window_get_type(void) G_GNUC_CONST;
 
 GtkWidget *ui_window_new();
-void ui_window_postinit(UIWindow *window, Map* map);
+void ui_window_postinit(UIWindow *window, Map* volatile* map);
 
 G_END_DECLS
 
