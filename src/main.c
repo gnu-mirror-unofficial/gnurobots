@@ -86,7 +86,7 @@ gint main(gint argc, gchar *argv[])
 	/* Check command line */
 
 	/* Create a robot Object */
-	robot = g_robot_new(1, 1, 1, 0, DEFAULT_ENERGY, DEFAULT_SHIELDS, 0, 0,
+	robot = g_robot_new(1, 1, EAST, 0, DEFAULT_ENERGY, DEFAULT_SHIELDS, 0, 0,
 		NULL, NULL);
 
 	g_assert(robot != NULL);

@@ -582,19 +582,19 @@ gboolean g_robot_look(GRobot *robot, gchar *str)
 	/* determine changes to x,y */
 	switch (robot->dir)
 	{
-	case 0:					/* N */
+	case NORTH:
 		dx = 0;
 		dy = -1;
 		break;
-	case 1:					/* E */
+	case EAST:
 		dx = 1;
 		dy = 0;
 		break;
-	case 2:					/* S */
+	case SOUTH:
 		dx = 0;
 		dy = 1;
 		break;
-	case 3:					/* W */
+	case WEST:
 		dx = -1;
 		dy = 0;
 		break;
