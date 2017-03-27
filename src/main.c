@@ -50,8 +50,6 @@ GRobot *robot = NULL;		/* The current robot */
 UIWindow *ui;
 UIArena *arena;
 Map *map = NULL;
-gboolean loading = TRUE;
-volatile gboolean *ploading = &loading;
 
 gpointer callback_scm(gpointer data);
 void gui_init();
@@ -313,9 +311,6 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 	MAP_SET_OBJECT(map, G_ROBOT_POSITION_Y(robot),
 		G_ROBOT_POSITION_X(robot), ROBOT);
 
-	g_printf("Loading GTK Interface ... Please wait\n\n");
-	while(*ploading);
-
 	/* Now initialize the rest of the Robot properties */
 	g_object_set(G_OBJECT(robot),
 		"user-interface", G_OBJECT(arena), "map", G_OBJECT(map), NULL);
@@ -374,8 +369,6 @@ void gui_main()
 	ui_arena_draw(arena);
 	ui_arena_update_status(arena, "Welcome to GNU Robots",
 	                       robot->energy, robot->score, robot->shields);
-
-	*ploading = FALSE;
 
 	gtk_main();
 	gdk_threads_leave();
