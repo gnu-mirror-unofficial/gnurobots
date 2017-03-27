@@ -37,6 +37,9 @@
 
 #include <glib/gprintf.h>
 
+#include "grobot.h"
+extern GRobot *robot;
+
 #define TILE_SIZE	16
 
 enum
@@ -198,7 +201,7 @@ void ui_arena_draw(UIArena *arena)
 					j * TILE_SIZE);
 				break;
 			case ROBOT:
-				put_tile(arena, arena->priv->robotPix, i * TILE_SIZE,
+				put_tile(arena, arena->priv->robotDirs[robot->dir], i * TILE_SIZE,
 					j * TILE_SIZE);
 				break;
 			default:
@@ -317,7 +320,7 @@ void ui_arena_add_thing(UIArena *arena, gint x, gint y, gint thing)
 		put_tile(arena, arena->priv->baddie, w_x, w_y);
 		break;
 	case ROBOT:
-		put_tile(arena, arena->priv->robotPix, w_x, w_y);
+		put_tile(arena, arena->priv->robotDirs[robot->dir], w_x, w_y);
 		break;
 	default:
 		put_tile(arena, arena->priv->wall, w_x, w_y);
