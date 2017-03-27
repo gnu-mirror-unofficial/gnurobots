@@ -490,7 +490,8 @@ gboolean g_robot_smell(GRobot *robot, gchar *str)
 
 	gdk_threads_enter();
 	ui_arena_robot_smell(robot->ui, robot->x, robot->y, robot->dir,
-		robot->energy, robot->score, robot->shields);
+		robot->energy, robot->score, robot->shields,
+		str);
 	gdk_threads_leave();
 
 	/* Smell for the thing */
@@ -556,7 +557,7 @@ gboolean g_robot_feel(GRobot *robot, gchar *str)
 
 	gdk_threads_enter();
 	ui_arena_robot_feel(robot->ui, robot->x, robot->y, robot->dir, x_to,
-		y_to, robot->energy, robot->score, robot->shields);
+		y_to, robot->energy, robot->score, robot->shields, str);
 	gdk_threads_leave();
 
 	if (MAP_GET_OBJECT(robot->map, x_to, y_to) == BADDIE)
@@ -620,7 +621,7 @@ gboolean g_robot_look(GRobot *robot, gchar *str)
 
 	gdk_threads_enter();
 	ui_arena_robot_look(robot->ui, robot->x, robot->y, robot->dir, x_to,
-		y_to, robot->energy, robot->score, robot->shields);
+		y_to, robot->energy, robot->score, robot->shields, str);
 	gdk_threads_leave();
 
 	while (MAP_GET_OBJECT(robot->map, x_to, y_to) == SPACE)

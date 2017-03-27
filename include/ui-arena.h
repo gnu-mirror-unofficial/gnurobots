@@ -60,23 +60,25 @@ GtkWidget *ui_arena_new();
 void ui_arena_set_map(UIArena *arena, Map *map);
 void ui_arena_postinit(UIArena *arena);
 void ui_arena_draw(UIArena *arena);
-void ui_arena_update_status(UIArena *arena, const gchar *s, glong energy,
-	glong score, glong shields);
+void ui_arena_update_status(UIArena *arena, const gchar *fmt, const gchar *thing,
+	glong energy, glong score, glong shields);
 
 void ui_arena_add_thing(UIArena *arena, gint x, gint y, gint thing);
 void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 	gint to_x, gint to_y, gint cdir, glong energy, glong score,
 	glong shields);
 void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
-	glong energy, glong score, glong shields);
+	glong energy, glong score, glong shields, const gchar *thing);
 void ui_arena_robot_zap(UIArena *arena, gint x, gint y, gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields);
 void ui_arena_robot_feel(UIArena *arena, gint x, gint y, gint cdir,
-	gint x_to, gint y_to, glong energy, glong score, glong shields);
+	gint x_to, gint y_to, glong energy, glong score, glong shields,
+	const gchar *thing);
 void ui_arena_robot_grab(UIArena *arena, gint x, gint y, gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields);
 void ui_arena_robot_look(UIArena *arena, gint x, gint y, gint cdir,
-	gint x_to, gint y_to, glong energy, glong score, glong shields);
+	gint x_to, gint y_to, glong energy, glong score, glong shields,
+	const gchar *thing);
 
 G_END_DECLS
 

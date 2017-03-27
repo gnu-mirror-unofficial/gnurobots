@@ -246,11 +246,12 @@ static void put_tile(UIArena *arena, GdkPixmap *image, gint x, gint y)
 		GDK_DRAWABLE(image), 0, 0, x, y, TILE_SIZE, TILE_SIZE);
 }
 
-void ui_arena_update_status(UIArena *arena, const gchar *s, glong energy,
-	glong score, glong shields)
+void ui_arena_update_status(UIArena *arena, const gchar *fmt, const gchar *thing,
+	glong energy, glong score, glong shields)
 {
 	gchar status[20];
 	gint x = 0;
+	gchar *s = NULL;
 
 	while(x < arena->priv->width)
 	{
@@ -261,9 +262,11 @@ void ui_arena_update_status(UIArena *arena, const gchar *s, glong energy,
 		x += 96;
 	}
 
+	s = g_strdup_printf(fmt, thing);
 	gdk_draw_string(arena->priv->buf, arena->priv->font,
 		GTK_WIDGET(arena)->style->white_gc, 3,
 		arena->priv->map_size->num_rows * TILE_SIZE + 16, s);
+	g_free(s);
 
 	if(energy > -1)
 	{
@@ -342,7 +345,8 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 
 	g_assert(distance <= 1);
 
-	ui_arena_update_status(arena, "Robot moves..", energy, score, shields);
+	ui_arena_update_status(arena, "Robot moves..", NULL,
+	                       energy, score, shields);
 
 	/* Check if robot is moving within a single box */
 	if (distance == 0)
@@ -423,11 +427,11 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 
 /* hooks to animate the robot */
 void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
-	glong energy, glong score, glong shields)
+	glong energy, glong score, glong shields, const gchar *thing)
 {
 	/* If we want to change the pic, do it here */
-	ui_arena_update_status(arena, "Robot sniffs...", energy, score,
-		shields);
+	ui_arena_update_status(arena, "Robot sniffs for %s...", thing,
+		energy, score, shields);
 
 	g_usleep(USLEEP_TIME);
 }
@@ -435,17 +439,19 @@ void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
 void ui_arena_robot_zap(UIArena *arena,	gint x,	gint y,	gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields)
 {
-	ui_arena_update_status(arena, "Robot fires his little gun...", energy,
-		score, shields);
+	ui_arena_update_status(arena, "Robot fires his little gun...", NULL,
+		energy, score, shields);
 
 	g_usleep(USLEEP_TIME);
 }
 
-void ui_arena_robot_feel(UIArena *arena, gint x, gint y, gint cdir,
-	gint x_to, gint y_to, glong energy, glong score, glong shields)
+void ui_arena_robot_feel(UIArena *arena,
+	gint x, gint y, gint cdir,
+	gint x_to, gint y_to, glong energy, glong score, glong shields,
+	const gchar *thing)
 {
-	ui_arena_update_status(arena, "Robot feels for a thing...", energy,
-		score, shields);
+	ui_arena_update_status(arena, "Robot feels for %s...", thing,
+		energy, score, shields);
 
 	g_usleep(USLEEP_TIME);
 }
@@ -453,17 +459,18 @@ void ui_arena_robot_feel(UIArena *arena, gint x, gint y, gint cdir,
 void ui_arena_robot_grab(UIArena *arena, gint x, gint y, gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields)
 {
-	ui_arena_update_status(arena, "Robot grabs thing...", energy, score,
-		shields);
+	ui_arena_update_status(arena, "Robot grabs...", NULL,
+		energy, score, shields);
 
 	g_usleep(USLEEP_TIME);
 }
 
 void ui_arena_robot_look(UIArena *arena, gint x, gint y, gint cdir,
-	gint x_to, gint y_to, glong energy, glong score, glong shields)
+	gint x_to, gint y_to, glong energy, glong score, glong shields,
+	const gchar *thing)
 {
-	ui_arena_update_status(arena, "Robot looks for a thing...", energy,
-		score, shields);
+	ui_arena_update_status(arena, "Robot looks for %s...", thing,
+		energy, score, shields);
 
 	g_usleep(USLEEP_TIME);
 }

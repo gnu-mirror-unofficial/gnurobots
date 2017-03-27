@@ -370,7 +370,7 @@ void gui_main()
 
 	/* draw the map */
 	ui_arena_draw(arena);
-	ui_arena_update_status(arena, "Welcome to GNU Robots",
+	ui_arena_update_status(arena, "Welcome to GNU Robots", NULL,
 	                       robot->energy, robot->score, robot->shields);
 
 	gtk_main();
