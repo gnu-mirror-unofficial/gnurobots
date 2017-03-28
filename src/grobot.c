@@ -347,11 +347,9 @@ void g_robot_turn(GRobot *robot, gint num_turns)
 		}
 
 		/* animate the robot */
-		gdk_threads_enter();
 		ui_arena_move_robot(robot->ui, robot->x, robot->y, robot->x,
 			robot->y, robot->dir, robot->energy,
 			robot->score, robot->shields);
-		gdk_threads_leave();
 
 		robot->energy -= 2;
 
@@ -443,13 +441,11 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 			break;
 		}
 
-		gdk_threads_enter();
 		/* Animate/update the robot/arena/status regardless of
 		   whether the movement-attempt succeeded:
 		*/
 		ui_arena_move_robot(robot->ui, robot->x, robot->y, x_to, y_to,
 			robot->dir, robot->energy, robot->score, robot->shields);
-		gdk_threads_leave();
 
 		if (robot->energy < 1 || robot->shields < 1)
 		{
@@ -488,11 +484,9 @@ gboolean g_robot_smell(GRobot *robot, gchar *str)
 		g_signal_emit(robot, g_robot_signals[DEATH], 0);
 	}
 
-	gdk_threads_enter();
 	ui_arena_robot_smell(robot->ui, robot->x, robot->y, robot->dir,
 		robot->energy, robot->score, robot->shields,
 		str);
-	gdk_threads_leave();
 
 	/* Smell for the thing */
 
@@ -555,10 +549,8 @@ gboolean g_robot_feel(GRobot *robot, gchar *str)
 	x_to = robot->x + dx;
 	y_to = robot->y + dy;
 
-	gdk_threads_enter();
 	ui_arena_robot_feel(robot->ui, robot->x, robot->y, robot->dir, x_to,
 		y_to, robot->energy, robot->score, robot->shields, str);
-	gdk_threads_leave();
 
 	if (MAP_GET_OBJECT(robot->map, x_to, y_to) == BADDIE)
 	{
@@ -619,10 +611,8 @@ gboolean g_robot_look(GRobot *robot, gchar *str)
 	x_to = robot->x + dx;
 	y_to = robot->y + dy;
 
-	gdk_threads_enter();
 	ui_arena_robot_look(robot->ui, robot->x, robot->y, robot->dir, x_to,
 		y_to, robot->energy, robot->score, robot->shields, str);
-	gdk_threads_leave();
 
 	while (MAP_GET_OBJECT(robot->map, x_to, y_to) == SPACE)
 	{
@@ -681,10 +671,8 @@ gboolean g_robot_grab(GRobot *robot)
 		g_signal_emit(robot, g_robot_signals[DEATH], 0);
 	}
 
-	gdk_threads_enter();
 	ui_arena_robot_grab(robot->ui, robot->x, robot->y, robot->dir, x_to,
 		y_to, robot->energy, robot->score, robot->shields);
-	gdk_threads_leave();
 
 	/* Did we grab it? */
 
@@ -716,9 +704,7 @@ gboolean g_robot_grab(GRobot *robot)
 
 	/* only successful grabs get here */
 	MAP_SET_OBJECT(robot->map, x_to, y_to, SPACE);
-	gdk_threads_enter();
 	ui_arena_add_thing(robot->ui, x_to, y_to, SPACE);
-	gdk_threads_leave();
 
 	return TRUE;
 }
@@ -763,10 +749,8 @@ gboolean g_robot_zap(GRobot *robot)
 		g_signal_emit(robot, g_robot_signals[DEATH], 0);
 	}
 	robot->shots++;
-	gdk_threads_enter();
 	ui_arena_robot_zap(robot->ui, robot->x, robot->y, robot->dir, x_to,
 		y_to, robot->energy, robot->score, robot->shields);
-	gdk_threads_leave();
 
 	/* Did we destroy it? */
 	switch (MAP_GET_OBJECT(robot->map, x_to, y_to))
@@ -780,17 +764,13 @@ gboolean g_robot_zap(GRobot *robot)
 	case BADDIE:
 	case FOOD:
 	case PRIZE:
-		gdk_threads_enter();
 		ui_arena_add_thing(robot->ui, x_to, y_to, SPACE);
-		gdk_threads_leave();
 		break;
 	}
 
 	/* only success gets here */
 	MAP_SET_OBJECT(robot->map, x_to, y_to, SPACE);
-	gdk_threads_enter();
 	ui_arena_add_thing(robot->ui, x_to, y_to, SPACE);
-	gdk_threads_leave();
 
 	return TRUE;
 }

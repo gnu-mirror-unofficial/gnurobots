@@ -305,6 +305,8 @@ void ui_arena_add_thing(UIArena *arena, gint x, gint y, gint thing)
 	w_x = x * TILE_SIZE;
 	w_y = y * TILE_SIZE;
 
+	gdk_threads_enter ();
+
 	switch (thing)
 	{
 	case SPACE:
@@ -332,6 +334,8 @@ void ui_arena_add_thing(UIArena *arena, gint x, gint y, gint thing)
 
 	gtk_widget_queue_draw_area(GTK_WIDGET(arena), 0, 0, arena->priv->width,
 		arena->priv->height);
+
+	gdk_threads_leave ();
 }
 
 void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
@@ -344,6 +348,8 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 	gboolean ok;
 
 	g_assert(distance <= 1);
+
+	gdk_threads_enter ();
 
 	ui_arena_update_status(arena, "Robot moves..", NULL,
 	                       energy, score, shields);
@@ -359,6 +365,7 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 		gtk_widget_queue_draw_area(GTK_WIDGET(arena), 0, 0,
 			arena->priv->width,	arena->priv->height);
 
+		gdk_threads_leave ();
 		return;
 	}
 
@@ -416,12 +423,15 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 			arena->priv->width,	arena->priv->height);
 		gdk_window_process_all_updates();
 
+		gdk_threads_leave ();
 		g_usleep(USLEEP_TIME / 16);
+		gdk_threads_enter ();
 
 		if (!ok)
 			break;
 	}
 
+	gdk_threads_leave ();
 	g_usleep(USLEEP_TIME);
 }
 
@@ -429,9 +439,11 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
 	glong energy, glong score, glong shields, const gchar *thing)
 {
+	gdk_threads_enter ();
 	/* If we want to change the pic, do it here */
 	ui_arena_update_status(arena, "Robot sniffs for %s...", thing,
 		energy, score, shields);
+	gdk_threads_leave ();
 
 	g_usleep(USLEEP_TIME);
 }
@@ -439,8 +451,10 @@ void ui_arena_robot_smell(UIArena *arena, gint x, gint y, gint cdir,
 void ui_arena_robot_zap(UIArena *arena,	gint x,	gint y,	gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields)
 {
+	gdk_threads_enter ();
 	ui_arena_update_status(arena, "Robot fires his little gun...", NULL,
 		energy, score, shields);
+	gdk_threads_leave ();
 
 	g_usleep(USLEEP_TIME);
 }
@@ -450,8 +464,10 @@ void ui_arena_robot_feel(UIArena *arena,
 	gint x_to, gint y_to, glong energy, glong score, glong shields,
 	const gchar *thing)
 {
+	gdk_threads_enter ();
 	ui_arena_update_status(arena, "Robot feels for %s...", thing,
 		energy, score, shields);
+	gdk_threads_leave ();
 
 	g_usleep(USLEEP_TIME);
 }
@@ -459,8 +475,10 @@ void ui_arena_robot_feel(UIArena *arena,
 void ui_arena_robot_grab(UIArena *arena, gint x, gint y, gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields)
 {
+	gdk_threads_enter ();
 	ui_arena_update_status(arena, "Robot grabs...", NULL,
 		energy, score, shields);
+	gdk_threads_leave ();
 
 	g_usleep(USLEEP_TIME);
 }
@@ -469,8 +487,10 @@ void ui_arena_robot_look(UIArena *arena, gint x, gint y, gint cdir,
 	gint x_to, gint y_to, glong energy, glong score, glong shields,
 	const gchar *thing)
 {
+	gdk_threads_enter ();
 	ui_arena_update_status(arena, "Robot looks for %s...", thing,
 		energy, score, shields);
+	gdk_threads_leave ();
 
 	g_usleep(USLEEP_TIME);
 }
