@@ -341,7 +341,7 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 
 	ui_arena_update_status(arena, "Robot moves..", energy, score, shields);
 
-	/* Check if robot is moving withing a single box */
+	/* Check if robot is moving within a single box */
 	if (distance == 0)
 	{
 		put_tile(arena, arena->priv->space, from_x * TILE_SIZE,
