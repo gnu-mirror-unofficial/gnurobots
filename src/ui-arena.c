@@ -366,6 +366,7 @@ void ui_arena_move_robot(UIArena *arena, gint from_x, gint from_y,
 			arena->priv->width,	arena->priv->height);
 
 		gdk_threads_leave ();
+		g_usleep(USLEEP_TIME);
 		return;
 	}
 
