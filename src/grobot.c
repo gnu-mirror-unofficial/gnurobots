@@ -393,6 +393,7 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 	}
 
 	/* Move the robot */
+	/* Arguably this should use energy even if steps=0, but it doesn't... */
 
 	for (i = 0; i < abs(steps); i++)
 	{
@@ -416,15 +417,6 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 			MAP_SET_OBJECT(robot->map, robot->x, robot->y, SPACE);
 			MAP_SET_OBJECT(robot->map, x_to, y_to, ROBOT);
 
-			gdk_threads_enter();
-			ui_arena_move_robot(robot->ui, robot->x, robot->y, x_to, y_to,
-				robot->dir, robot->energy, robot->score, robot->shields);
-			gdk_threads_leave();
-
-			robot->x = x_to;
-			robot->y = y_to;
-			robot->units++;
-
 			break;
 
 		case BADDIE:
@@ -434,7 +426,9 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 			{
 				g_signal_emit(robot, g_robot_signals[DEATH], 0);
 			}
-			return FALSE;
+
+			x_to = robot->x;
+			y_to = robot->y;
 
 			break;
 
@@ -445,7 +439,9 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 			{
 				g_signal_emit(robot, g_robot_signals[DEATH], 0);
 			}
-			return FALSE;
+
+			x_to = robot->x;
+			y_to = robot->y;
 
 			break;
 
@@ -455,10 +451,32 @@ gboolean g_robot_move(GRobot *robot, gint steps)
 			{
 				g_signal_emit(robot, g_robot_signals[DEATH], 0);
 			}
-			return FALSE;
+
+			x_to = robot->x;
+			y_to = robot->y;
 
 			break;
 		}
+
+		gdk_threads_enter();
+		/* Animate/update the robot/arena/status regardless of
+		   whether the movement-attempt succeeded:
+		*/
+		ui_arena_move_robot(robot->ui, robot->x, robot->y, x_to, y_to,
+			robot->dir, robot->energy, robot->score, robot->shields);
+		gdk_threads_leave();
+
+		if (x_to == robot->x && y_to == robot->y) {
+			/* NOTE: by returning here, we charge only 1 hit
+			   against energy and shields, regardless of
+			   how many spaces the robot was attempting to go....
+			*/
+			return FALSE;
+		}
+
+		robot->x = x_to;
+		robot->y = y_to;
+		robot->units++;
 	}							/* for */
 
 	return TRUE;
