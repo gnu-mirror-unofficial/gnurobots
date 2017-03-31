@@ -13,6 +13,10 @@ Installing GNU Robots
 (0) To build GNU Robots, you *first* need to have already compiled and
     installed the GNU Guile library.  GNU Robots was built using Guile 2.0.
 
+    You also need:
+
+        * GTK+ 2.x
+
 (1) Type:
 
     ./configure
