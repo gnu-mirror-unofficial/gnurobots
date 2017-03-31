@@ -39,30 +39,6 @@ AC_SUBST(schemedir)
 mapsdir="\$(pkgdatadir)/maps"
 AC_SUBST(mapsdir)
 
-for termlib in ncurses curses termcap terminfo termlib ; do
-	AC_CHECK_LIB(${termlib}, tgoto,
-		[READLINE_EXTRA="-l${termlib}"; break])
-done
-
-AC_CHECK_LIB(readline,readline,[READLINE_LIBS=-lreadline],
-	AC_MSG_ERROR([
-
-You need the GNU Readline library to build this program.
-
-]),[$READLINE_EXTRA])
-
-AC_CHECK_HEADER(readline/readline.h,
-    [READLINE_CFLAGS=-I/usr/include/readline/],	AC_MSG_ERROR([
-
-You need the GNU Readline headers to build this program.
-
-]))
-
-READLINE_LIBS="$READLINE_LIBS $READLINE_EXTRA"
-
-AC_SUBST(READLINE_LIBS)
-AC_SUBST(READLINE_CFLAGS)
-
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h)
