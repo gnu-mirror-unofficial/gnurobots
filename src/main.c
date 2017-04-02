@@ -304,7 +304,6 @@ void main_prog(void *closure, gint argc, gchar *argv[])
 
 	if (map == NULL)
 	{
-		exit_nicely();
 		exit (1);
 	}
 
