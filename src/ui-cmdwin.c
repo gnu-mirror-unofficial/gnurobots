@@ -56,6 +56,14 @@ static void ui_cmdwin_init(UICmdWin *cmdwin)
 	dup2(slave_pty, 1);
 	dup2(slave_pty, 2);
 
+	/* Explicitly set stdio streams into line-buffered mode,
+	   in case they were initially connected to non-tty FDs
+	   (as is probably the case if we were started from a GUI launcher),
+	   in which case they'd be in fully-buffered mode by default... */
+	fflush (stdin); setlinebuf (stdin);
+	fflush (stdout); setlinebuf (stdout);
+	fflush (stderr); setlinebuf (stderr);
+
 	vte_terminal_set_pty(VTE_TERMINAL(cmdwin->priv->vte), master_pty);
 
 	gtk_widget_show(cmdwin->priv->vte);
