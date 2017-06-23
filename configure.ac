@@ -17,7 +17,7 @@
 ## along with GNU Robots.  If not, see <http://www.gnu.org/licenses/>.
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([GNU Robots], [1.2.0], [brad@brad-smith.co.uk], [gnurobots])
+AC_INIT([GNU Robots], [1.2.0], [gnurobots@gnu.org], [gnurobots])
 AC_PREREQ([2.59])
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([include/api.h])
