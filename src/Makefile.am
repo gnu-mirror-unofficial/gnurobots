@@ -29,5 +29,6 @@ AM_CFLAGS = -Wall \
 
 gnurobots_SOURCES = main.c api.c map.c grobot.c \
 	ui-window.c ui-cmdwin.c ui-arena.c
-gnurobots_LDFLAGS = $(GUILE_LDFLAGS) $(GTHREAD2_LIBS) \
+gnurobots_LDFLAGS = $(GUILE_LDFLAGS)
+gnurobots_LDADD = $(GUILE_LIBS) $(GTHREAD2_LIBS) \
 	$(GTK2_LIBS) $(VTE_LIBS) -lutil
