@@ -17,9 +17,8 @@
 
 bin_PROGRAMS = gnurobots
 
-AM_CFLAGS = -Wall
-
-INCLUDES = $(GUILE_CFLAGS) $(GTK2_CFLAGS) \
+AM_CFLAGS = -Wall \
+	$(GUILE_CFLAGS) $(GTK2_CFLAGS) \
 	$(VTE_CFLAGS) $(GTHREAD2_CFLAGS) \
 	-I$(top_builddir)/include \
    	-DPKGLIBDIR=\"$(pkglibdir)\" \
