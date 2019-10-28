@@ -51,12 +51,6 @@ You need openpty to build this program.
 
 ]))
 
-AC_CHECK_LIB(guile-2.0, scm_to_locale_string, [], AC_MSG_ERROR([
-
-You need guile 2.0 to build this program.
-
-]))
-
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
